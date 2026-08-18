@@ -1,0 +1,6979 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =========================================================
+         GLOBALFX PRO
+         Professional Worldwide Currency Converter
+
+         FEATURES
+         ---------------------------------------------------------
+         ✓ Worldwide currency list from live API
+         ✓ Live exchange rates
+         ✓ Currency converter
+         ✓ Searchable currencies
+         ✓ Favorites
+         ✓ Conversion history
+         ✓ Exchange-rate chart
+         ✓ Market overview
+         ✓ Login / Register UI
+         ✓ Email validation
+         ✓ LocalStorage
+         ✓ Dark / Light mode
+         ✓ Responsive design
+         ✓ Mobile navigation
+         ✓ Export history to CSV
+         ✓ Internet/API status
+         ✓ Automatic rate refresh
+         ✓ Font Awesome icons
+         ✓ Tailwind CSS
+         ✓ Fully commented JavaScript
+    ========================================================== -->
+
+
+    <!-- =========================================================
+         BASIC HTML SETTINGS
+    ========================================================== -->
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#4f46e5"
+    >
+
+    <meta
+        name="description"
+        content="GlobalFX Pro - Professional worldwide currency converter."
+    >
+
+    <title>GlobalFX Pro — Currency Converter</title>
+
+
+    <!-- =========================================================
+         TAILWIND CSS CDN
+    ========================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- =========================================================
+         FONT AWESOME CDN
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+
+    <!-- =========================================================
+         GOOGLE FONT
+    ========================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================================
+         TAILWIND CONFIG
+    ========================================================== -->
+
+    <script>
+
+        tailwind.config = {
+
+            darkMode: "class",
+
+            theme: {
+
+                extend: {
+
+                    fontFamily: {
+
+                        sans: [
+                            "Inter",
+                            "sans-serif"
+                        ]
+
+                    },
+
+                    boxShadow: {
+
+                        premium:
+                            "0 25px 70px rgba(15,23,42,.12)"
+
+                    },
+
+                    animation: {
+
+                        float:
+                            "float 5s ease-in-out infinite",
+
+                        fade:
+                            "fade .35s ease",
+
+                        slide:
+                            "slide .35s ease",
+
+                        spinSlow:
+                            "spin 1.2s linear infinite"
+
+                    }
+
+                }
+
+            }
+
+        };
+
+    </script>
+
+
+    <!-- =========================================================
+         CUSTOM CSS
+    ========================================================== -->
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        ::selection {
+            background: #6366f1;
+            color: white;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 999px;
+        }
+
+        .glass {
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .premium-gradient {
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(99,102,241,.18),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(14,165,233,.16),
+                    transparent 30%
+                );
+        }
+
+        .hero-gradient {
+            background:
+                linear-gradient(
+                    135deg,
+                    #312e81 0%,
+                    #4f46e5 48%,
+                    #0284c7 100%
+                );
+        }
+
+        .chart-grid {
+            background-image:
+                linear-gradient(
+                    rgba(148,163,184,.12) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(148,163,184,.12) 1px,
+                    transparent 1px
+                );
+            background-size: 40px 40px;
+        }
+
+        .currency-row {
+            transition:
+                transform .2s ease,
+                background .2s ease;
+        }
+
+        .currency-row:hover {
+            transform: translateX(3px);
+        }
+
+        .nav-active {
+            background: rgba(99,102,241,.12);
+            color: #4f46e5;
+        }
+
+        .dark .nav-active {
+            color: #818cf8;
+            background: rgba(99,102,241,.14);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            scrollbar-width: none;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+        }
+
+        @keyframes fade {
+
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+
+        }
+
+        @keyframes slide {
+
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        .animate-fade {
+            animation: fade .35s ease;
+        }
+
+        .animate-slide {
+            animation: slide .35s ease;
+        }
+
+    </style>
+
+</head>
+
+
+<body
+    class="
+        bg-slate-50
+        text-slate-900
+        dark:bg-slate-950
+        dark:text-white
+        transition-colors
+        duration-300
+    "
+>
+
+
+    <!-- =========================================================
+         LOGIN APPLICATION
+    ========================================================== -->
+
+    <div
+        id="authScreen"
+        class="
+            min-h-screen
+            premium-gradient
+            flex
+            items-center
+            justify-center
+            p-4
+        "
+    >
+
+        <div
+            class="
+                w-full
+                max-w-5xl
+                grid
+                lg:grid-cols-2
+                overflow-hidden
+                rounded-[2rem]
+                shadow-premium
+                bg-white
+                dark:bg-slate-900
+                border
+                border-slate-200
+                dark:border-slate-800
+                animate-slide
+            "
+        >
+
+
+            <!-- =================================================
+                 AUTH BRAND PANEL
+            ================================================== -->
+
+            <div
+                class="
+                    hidden
+                    lg:flex
+                    hero-gradient
+                    text-white
+                    p-12
+                    flex-col
+                    justify-between
+                    relative
+                    overflow-hidden
+                "
+            >
+
+                <div
+                    class="
+                        absolute
+                        w-64
+                        h-64
+                        rounded-full
+                        border
+                        border-white/20
+                        -right-20
+                        -top-20
+                        animate-float
+                    "
+                ></div>
+
+                <div
+                    class="
+                        absolute
+                        w-48
+                        h-48
+                        rounded-full
+                        border
+                        border-white/10
+                        -left-20
+                        bottom-10
+                    "
+                ></div>
+
+
+                <!-- Brand -->
+
+                <div>
+
+                    <div class="flex items-center gap-3">
+
+                        <div
+                            class="
+                                w-12
+                                h-12
+                                rounded-2xl
+                                bg-white/15
+                                flex
+                                items-center
+                                justify-center
+                                text-xl
+                                glass
+                            "
+                        >
+
+                            <i class="fa-solid fa-earth-americas"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h1 class="font-black text-xl">
+                                GlobalFX
+                            </h1>
+
+                            <p class="text-white/60 text-xs">
+                                PRO
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mt-16">
+
+                        <p
+                            class="
+                                text-indigo-100
+                                text-sm
+                                font-semibold
+                            "
+                        >
+                            SMART GLOBAL MONEY
+                        </p>
+
+                        <h2
+                            class="
+                                text-5xl
+                                font-black
+                                leading-tight
+                                mt-3
+                            "
+                        >
+                            Your world.
+                            <br>
+                            Your currencies.
+                        </h2>
+
+                        <p
+                            class="
+                                text-white/70
+                                mt-5
+                                leading-7
+                            "
+                        >
+                            Convert currencies, monitor rates,
+                            save favorite pairs and manage your
+                            global money dashboard.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Features -->
+
+                <div class="space-y-4">
+
+                    <div class="flex items-center gap-3">
+
+                        <div
+                            class="
+                                w-9
+                                h-9
+                                rounded-xl
+                                bg-white/10
+                                flex
+                                items-center
+                                justify-center
+                            "
+                        >
+
+                            <i class="fa-solid fa-bolt"></i>
+
+                        </div>
+
+                        <span class="text-sm">
+                            Live ExchangeRate-API connection
+                        </span>
+
+                    </div>
+
+                    <div class="flex items-center gap-3">
+
+                        <div
+                            class="
+                                w-9
+                                h-9
+                                rounded-xl
+                                bg-white/10
+                                flex
+                                items-center
+                                justify-center
+                            "
+                        >
+
+                            <i class="fa-solid fa-chart-line"></i>
+
+                        </div>
+
+                        <span class="text-sm">
+                            Historical rate tracking
+                        </span>
+
+                    </div>
+
+                    <div class="flex items-center gap-3">
+
+                        <div
+                            class="
+                                w-9
+                                h-9
+                                rounded-xl
+                                bg-white/10
+                                flex
+                                items-center
+                                justify-center
+                            "
+                        >
+
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                        </div>
+
+                        <span class="text-sm">
+                            Local account preferences
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 AUTH FORM
+            ================================================== -->
+
+            <div class="p-7 sm:p-10">
+
+                <!-- Mobile Logo -->
+
+                <div
+                    class="
+                        lg:hidden
+                        flex
+                        justify-center
+                        mb-8
+                    "
+                >
+
+                    <div
+                        class="
+                            w-14
+                            h-14
+                            rounded-2xl
+                            bg-indigo-600
+                            text-white
+                            flex
+                            items-center
+                            justify-center
+                            text-xl
+                            shadow-lg
+                        "
+                    >
+
+                        <i class="fa-solid fa-earth-americas"></i>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Tabs -->
+
+                <div
+                    class="
+                        grid
+                        grid-cols-2
+                        bg-slate-100
+                        dark:bg-slate-800
+                        rounded-2xl
+                        p-1
+                        mb-8
+                    "
+                >
+
+                    <button
+                        id="authLoginTab"
+                        class="
+                            py-3
+                            rounded-xl
+                            bg-white
+                            dark:bg-slate-700
+                            shadow
+                            font-bold
+                        "
+                    >
+                        Login
+                    </button>
+
+                    <button
+                        id="authRegisterTab"
+                        class="
+                            py-3
+                            rounded-xl
+                            text-slate-500
+                            dark:text-slate-400
+                            font-semibold
+                        "
+                    >
+                        Register
+                    </button>
+
+                </div>
+
+
+                <div class="mb-7">
+
+                    <h2
+                        id="authTitle"
+                        class="
+                            text-3xl
+                            font-black
+                        "
+                    >
+                        Welcome back
+                    </h2>
+
+                    <p
+                        id="authSubtitle"
+                        class="
+                            text-slate-500
+                            dark:text-slate-400
+                            mt-2
+                        "
+                    >
+                        Sign in to your GlobalFX dashboard.
+                    </p>
+
+                </div>
+
+
+                <!-- Auth Form -->
+
+                <form id="authForm">
+
+
+                    <!-- Name -->
+
+                    <div
+                        id="authNameWrapper"
+                        class="hidden mb-5"
+                    >
+
+                        <label
+                            class="
+                                block
+                                text-sm
+                                font-bold
+                                mb-2
+                            "
+                        >
+                            Full name
+                        </label>
+
+                        <div class="relative">
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-user
+                                    absolute
+                                    left-4
+                                    top-1/2
+                                    -translate-y-1/2
+                                    text-slate-400
+                                "
+                            ></i>
+
+                            <input
+                                id="authName"
+                                type="text"
+                                autocomplete="name"
+                                placeholder="Your full name"
+                                class="
+                                    w-full
+                                    pl-11
+                                    pr-4
+                                    py-3.5
+                                    rounded-xl
+                                    border
+                                    border-slate-200
+                                    dark:border-slate-700
+                                    bg-white
+                                    dark:bg-slate-800
+                                    outline-none
+                                    focus:ring-2
+                                    focus:ring-indigo-500
+                                "
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="mb-5">
+
+                        <label
+                            class="
+                                block
+                                text-sm
+                                font-bold
+                                mb-2
+                            "
+                        >
+                            Email address
+                        </label>
+
+                        <div class="relative">
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-envelope
+                                    absolute
+                                    left-4
+                                    top-1/2
+                                    -translate-y-1/2
+                                    text-slate-400
+                                "
+                            ></i>
+
+                            <input
+                                id="authEmail"
+                                type="email"
+                                required
+                                autocomplete="email"
+                                placeholder="you@example.com"
+                                class="
+                                    w-full
+                                    pl-11
+                                    pr-4
+                                    py-3.5
+                                    rounded-xl
+                                    border
+                                    border-slate-200
+                                    dark:border-slate-700
+                                    bg-white
+                                    dark:bg-slate-800
+                                    outline-none
+                                    focus:ring-2
+                                    focus:ring-indigo-500
+                                "
+                            >
+
+                        </div>
+
+                        <p
+                            id="emailValidation"
+                            class="
+                                hidden
+                                text-xs
+                                text-red-500
+                                mt-2
+                            "
+                        >
+                            Please enter a valid email address.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Password -->
+
+                    <div class="mb-5">
+
+                        <div
+                            class="
+                                flex
+                                items-center
+                                justify-between
+                                mb-2
+                            "
+                        >
+
+                            <label
+                                class="
+                                    text-sm
+                                    font-bold
+                                "
+                            >
+                                Password
+                            </label>
+
+                            <span
+                                class="
+                                    text-xs
+                                    text-slate-400
+                                "
+                            >
+                                6+ characters
+                            </span>
+
+                        </div>
+
+                        <div class="relative">
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-lock
+                                    absolute
+                                    left-4
+                                    top-1/2
+                                    -translate-y-1/2
+                                    text-slate-400
+                                "
+                            ></i>
+
+                            <input
+                                id="authPassword"
+                                type="password"
+                                minlength="6"
+                                required
+                                autocomplete="current-password"
+                                placeholder="Enter password"
+                                class="
+                                    w-full
+                                    pl-11
+                                    pr-12
+                                    py-3.5
+                                    rounded-xl
+                                    border
+                                    border-slate-200
+                                    dark:border-slate-700
+                                    bg-white
+                                    dark:bg-slate-800
+                                    outline-none
+                                    focus:ring-2
+                                    focus:ring-indigo-500
+                                "
+                            >
+
+                            <button
+                                type="button"
+                                id="authPasswordToggle"
+                                class="
+                                    absolute
+                                    right-4
+                                    top-1/2
+                                    -translate-y-1/2
+                                    text-slate-400
+                                "
+                            >
+
+                                <i class="fa-solid fa-eye"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Remember -->
+
+                    <div
+                        class="
+                            flex
+                            items-center
+                            justify-between
+                            mb-6
+                        "
+                    >
+
+                        <label
+                            class="
+                                flex
+                                items-center
+                                gap-2
+                                text-sm
+                                text-slate-500
+                                dark:text-slate-400
+                            "
+                        >
+
+                            <input
+                                id="rememberMe"
+                                type="checkbox"
+                                class="accent-indigo-600"
+                            >
+
+                            Remember me
+
+                        </label>
+
+                        <button
+                            type="button"
+                            class="
+                                text-sm
+                                font-semibold
+                                text-indigo-600
+                            "
+                            onclick="showToast('Connect a real authentication backend to enable password recovery.')"
+                        >
+                            Forgot password?
+                        </button>
+
+                    </div>
+
+
+                    <!-- Submit -->
+
+                    <button
+                        id="authSubmit"
+                        type="submit"
+                        class="
+                            w-full
+                            py-3.5
+                            rounded-xl
+                            bg-indigo-600
+                            hover:bg-indigo-700
+                            text-white
+                            font-bold
+                            shadow-lg
+                            shadow-indigo-500/20
+                            transition
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-right-to-bracket
+                                mr-2
+                            "
+                        ></i>
+
+                        Sign in
+
+                    </button>
+
+                </form>
+
+
+                <p
+                    class="
+                        text-center
+                        text-xs
+                        text-slate-400
+                        mt-6
+                        leading-5
+                    "
+                >
+                    Demo authentication is stored locally.
+                    Real email ownership verification requires
+                    a backend authentication service.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         MAIN APPLICATION
+    ========================================================== -->
+
+    <div
+        id="mainApp"
+        class="hidden min-h-screen"
+    >
+
+
+        <!-- =====================================================
+             TOP NAVIGATION
+        ====================================================== -->
+
+        <header
+            class="
+                fixed
+                top-0
+                left-0
+                right-0
+                z-50
+                h-16
+                bg-white/85
+                dark:bg-slate-950/85
+                glass
+                border-b
+                border-slate-200
+                dark:border-slate-800
+            "
+        >
+
+            <div
+                class="
+                    h-full
+                    max-w-[1600px]
+                    mx-auto
+                    px-4
+                    lg:px-6
+                    flex
+                    items-center
+                    justify-between
+                "
+            >
+
+
+                <!-- Brand -->
+
+                <div class="flex items-center gap-3">
+
+                    <div
+                        class="
+                            w-10
+                            h-10
+                            rounded-xl
+                            bg-indigo-600
+                            text-white
+                            flex
+                            items-center
+                            justify-center
+                            shadow-lg
+                        "
+                    >
+
+                        <i class="fa-solid fa-earth-americas"></i>
+
+                    </div>
+
+                    <div class="hidden sm:block">
+
+                        <div class="font-black">
+                            GlobalFX
+                        </div>
+
+                        <div
+                            class="
+                                text-[10px]
+                                uppercase
+                                tracking-widest
+                                text-indigo-500
+                                font-bold
+                            "
+                        >
+                            Professional
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Search -->
+
+                <div
+                    class="
+                        hidden
+                        md:flex
+                        relative
+                        w-full
+                        max-w-md
+                        mx-8
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-magnifying-glass
+                            absolute
+                            left-4
+                            top-1/2
+                            -translate-y-1/2
+                            text-slate-400
+                        "
+                    ></i>
+
+                    <input
+                        id="globalSearch"
+                        type="search"
+                        placeholder="Search currencies, codes or names..."
+                        class="
+                            w-full
+                            pl-11
+                            pr-4
+                            py-2.5
+                            rounded-xl
+                            bg-slate-100
+                            dark:bg-slate-800
+                            border
+                            border-transparent
+                            focus:border-indigo-500
+                            outline-none
+                            text-sm
+                        "
+                    >
+
+                </div>
+
+
+                <!-- Right actions -->
+
+                <div class="flex items-center gap-2">
+
+
+                    <!-- API Status -->
+
+                    <div
+                        id="apiStatus"
+                        class="
+                            hidden
+                            lg:flex
+                            items-center
+                            gap-2
+                            px-3
+                            py-2
+                            rounded-xl
+                            bg-emerald-50
+                            dark:bg-emerald-500/10
+                            text-emerald-600
+                            text-xs
+                            font-bold
+                        "
+                    >
+
+                        <span
+                            class="
+                                w-2
+                                h-2
+                                rounded-full
+                                bg-emerald-500
+                            "
+                        ></span>
+
+                        Live
+
+                    </div>
+
+
+                    <!-- Theme -->
+
+                    <button
+                        id="themeToggle"
+                        class="
+                            w-10
+                            h-10
+                            rounded-xl
+                            hover:bg-slate-100
+                            dark:hover:bg-slate-800
+                        "
+                        title="Toggle theme"
+                    >
+
+                        <i class="fa-solid fa-moon"></i>
+
+                    </button>
+
+
+                    <!-- User -->
+
+                    <button
+                        id="profileButton"
+                        class="
+                            flex
+                            items-center
+                            gap-2
+                            p-1
+                            rounded-xl
+                            hover:bg-slate-100
+                            dark:hover:bg-slate-800
+                        "
+                    >
+
+                        <div
+                            id="profileAvatar"
+                            class="
+                                w-9
+                                h-9
+                                rounded-xl
+                                bg-indigo-100
+                                dark:bg-indigo-500/20
+                                text-indigo-600
+                                flex
+                                items-center
+                                justify-center
+                                font-bold
+                            "
+                        >
+                            U
+                        </div>
+
+                        <div
+                            class="
+                                hidden
+                                sm:block
+                                text-left
+                            "
+                        >
+
+                            <div
+                                id="profileName"
+                                class="
+                                    text-xs
+                                    font-bold
+                                "
+                            >
+                                User
+                            </div>
+
+                            <div
+                                class="
+                                    text-[10px]
+                                    text-slate-400
+                                "
+                            >
+                                Account
+                            </div>
+
+                        </div>
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-chevron-down
+                                text-xs
+                                text-slate-400
+                                hidden
+                                sm:block
+                            "
+                        ></i>
+
+                    </button>
+
+
+                    <!-- Profile menu -->
+
+                    <div
+                        id="profileMenu"
+                        class="
+                            hidden
+                            absolute
+                            right-4
+                            top-14
+                            w-64
+                            bg-white
+                            dark:bg-slate-900
+                            border
+                            border-slate-200
+                            dark:border-slate-800
+                            rounded-2xl
+                            shadow-2xl
+                            p-2
+                            animate-slide
+                        "
+                    >
+
+                        <div
+                            class="
+                                px-3
+                                py-3
+                                border-b
+                                border-slate-200
+                                dark:border-slate-800
+                                mb-2
+                            "
+                        >
+
+                            <p
+                                id="menuUserName"
+                                class="font-bold text-sm"
+                            >
+                                User
+                            </p>
+
+                            <p
+                                id="menuUserEmail"
+                                class="
+                                    text-xs
+                                    text-slate-400
+                                    mt-1
+                                    truncate
+                                "
+                            >
+                                user@example.com
+                            </p>
+
+                        </div>
+
+                        <button
+                            id="exportButton"
+                            class="
+                                w-full
+                                text-left
+                                px-3
+                                py-2.5
+                                rounded-xl
+                                hover:bg-slate-100
+                                dark:hover:bg-slate-800
+                                text-sm
+                            "
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-file-export
+                                    w-5
+                                    text-slate-400
+                                "
+                            ></i>
+
+                            Export history
+
+                        </button>
+
+                        <button
+                            id="logoutButton"
+                            class="
+                                w-full
+                                text-left
+                                px-3
+                                py-2.5
+                                rounded-xl
+                                hover:bg-red-50
+                                dark:hover:bg-red-500/10
+                                text-red-500
+                                text-sm
+                            "
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-right-from-bracket
+                                    w-5
+                                "
+                            ></i>
+
+                            Sign out
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
+        <aside
+            class="
+                hidden
+                lg:flex
+                fixed
+                left-0
+                top-16
+                bottom-0
+                w-64
+                bg-white
+                dark:bg-slate-900
+                border-r
+                border-slate-200
+                dark:border-slate-800
+                p-4
+                flex-col
+            "
+        >
+
+            <nav class="space-y-1">
+
+
+                <a
+                    href="#dashboardSection"
+                    class="
+                        nav-link
+                        nav-active
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-semibold
+                    "
+                >
+
+                    <i class="fa-solid fa-grid-2 w-5"></i>
+
+                    Dashboard
+
+                </a>
+
+
+                <a
+                    href="#converterSection"
+                    class="
+                        nav-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-semibold
+                        text-slate-500
+                        dark:text-slate-400
+                        hover:bg-slate-100
+                        dark:hover:bg-slate-800
+                    "
+                >
+
+                    <i class="fa-solid fa-arrows-rotate w-5"></i>
+
+                    Converter
+
+                </a>
+
+
+                <a
+                    href="#favoritesSection"
+                    class="
+                        nav-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-semibold
+                        text-slate-500
+                        dark:text-slate-400
+                        hover:bg-slate-100
+                        dark:hover:bg-slate-800
+                    "
+                >
+
+                    <i class="fa-solid fa-star w-5"></i>
+
+                    Favorites
+
+                </a>
+
+
+                <a
+                    href="#historySection"
+                    class="
+                        nav-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-semibold
+                        text-slate-500
+                        dark:text-slate-400
+                        hover:bg-slate-100
+                        dark:hover:bg-slate-800
+                    "
+                >
+
+                    <i class="fa-solid fa-clock-rotate-left w-5"></i>
+
+                    History
+
+                </a>
+
+
+                <a
+                    href="#marketSection"
+                    class="
+                        nav-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-semibold
+                        text-slate-500
+                        dark:text-slate-400
+                        hover:bg-slate-100
+                        dark:hover:bg-slate-800
+                    "
+                >
+
+                    <i class="fa-solid fa-chart-line w-5"></i>
+
+                    Market
+
+                </a>
+
+            </nav>
+
+
+            <!-- Sidebar bottom -->
+
+            <div class="mt-auto">
+
+                <div
+                    class="
+                        p-4
+                        rounded-2xl
+                        bg-indigo-50
+                        dark:bg-indigo-500/10
+                    "
+                >
+
+                    <div
+                        class="
+                            w-9
+                            h-9
+                            rounded-xl
+                            bg-indigo-600
+                            text-white
+                            flex
+                            items-center
+                            justify-center
+                            mb-3
+                        "
+                    >
+
+                        <i class="fa-solid fa-lightbulb"></i>
+
+                    </div>
+
+                    <p
+                        class="
+                            font-bold
+                            text-sm
+                        "
+                    >
+                        Pro Tip
+                    </p>
+
+                    <p
+                        class="
+                            text-xs
+                            text-slate-500
+                            dark:text-slate-400
+                            mt-1
+                            leading-5
+                        "
+                    >
+                        Double-click a currency pair
+                        to save it as a favorite.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================================
+             MAIN CONTENT
+        ====================================================== -->
+
+        <main
+            id="dashboardSection"
+            class="
+                lg:ml-64
+                pt-16
+                pb-20
+            "
+        >
+
+            <div
+                class="
+                    max-w-[1400px]
+                    mx-auto
+                    px-4
+                    sm:px-6
+                    lg:px-8
+                    py-8
+                "
+            >
+
+
+                <!-- =================================================
+                     HERO
+                ================================================== -->
+
+                <section
+                    class="
+                        hero-gradient
+                        rounded-[2rem]
+                        p-6
+                        md:p-8
+                        lg:p-10
+                        text-white
+                        relative
+                        overflow-hidden
+                        mb-6
+                        shadow-xl
+                    "
+                >
+
+                    <div
+                        class="
+                            absolute
+                            w-72
+                            h-72
+                            rounded-full
+                            bg-white/5
+                            -right-20
+                            -top-28
+                        "
+                    ></div>
+
+                    <div
+                        class="
+                            absolute
+                            w-48
+                            h-48
+                            rounded-full
+                            bg-white/5
+                            right-40
+                            -bottom-28
+                        "
+                    ></div>
+
+
+                    <div
+                        class="
+                            relative
+                            z-10
+                            grid
+                            lg:grid-cols-2
+                            gap-8
+                            items-center
+                        "
+                    >
+
+                        <div>
+
+                            <div
+                                class="
+                                    inline-flex
+                                    items-center
+                                    gap-2
+                                    px-3
+                                    py-1.5
+                                    rounded-full
+                                    bg-white/10
+                                    text-xs
+                                    font-bold
+                                    mb-5
+                                "
+                            >
+
+                                <span
+                                    class="
+                                        w-2
+                                        h-2
+                                        rounded-full
+                                        bg-emerald-400
+                                    "
+                                ></span>
+
+                                LIVE MARKET DATA
+
+                            </div>
+
+                            <h1
+                                class="
+                                    text-3xl
+                                    md:text-5xl
+                                    font-black
+                                    leading-tight
+                                "
+                            >
+                                Global currency
+                                <br class="hidden md:block">
+                                intelligence.
+                            </h1>
+
+                            <p
+                                class="
+                                    text-white/70
+                                    mt-4
+                                    max-w-xl
+                                    leading-7
+                                "
+                            >
+                                Convert currencies worldwide,
+                                follow market movements and
+                                keep your most important currency
+                                pairs one click away.
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            class="
+                                lg:justify-self-end
+                                w-full
+                                max-w-md
+                            "
+                        >
+
+                            <div
+                                class="
+                                    rounded-3xl
+                                    bg-white/10
+                                    glass
+                                    border
+                                    border-white/10
+                                    p-5
+                                "
+                            >
+
+                                <div
+                                    class="
+                                        flex
+                                        items-center
+                                        justify-between
+                                        mb-4
+                                    "
+                                >
+
+                                    <div>
+
+                                        <p
+                                            class="
+                                                text-xs
+                                                text-white/60
+                                            "
+                                        >
+                                            YOUR LOCAL CURRENCY
+                                        </p>
+
+                                        <p
+                                            class="
+                                                font-bold
+                                                mt-1
+                                            "
+                                        >
+                                            Pakistani Rupee
+                                        </p>
+
+                                    </div>
+
+                                    <div class="text-3xl">
+                                        🇵🇰
+                                    </div>
+
+                                </div>
+
+                                <div
+                                    class="
+                                        flex
+                                        items-end
+                                        justify-between
+                                    "
+                                >
+
+                                    <div>
+
+                                        <p
+                                            class="
+                                                text-xs
+                                                text-white/60
+                                            "
+                                        >
+                                            Current base
+                                        </p>
+
+                                        <p
+                                            class="
+                                                text-3xl
+                                                font-black
+                                                mt-1
+                                            "
+                                            id="heroPKRRate"
+                                        >
+                                            PKR
+                                        </p>
+
+                                    </div>
+
+                                    <button
+                                        id="heroPKRButton"
+                                        class="
+                                            px-4
+                                            py-2
+                                            rounded-xl
+                                            bg-white
+                                            text-indigo-700
+                                            text-sm
+                                            font-bold
+                                        "
+                                    >
+                                        Use PKR
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     QUICK STATS
+                ================================================== -->
+
+                <section
+                    class="
+                        grid
+                        grid-cols-2
+                        lg:grid-cols-4
+                        gap-4
+                        mb-6
+                    "
+                >
+
+                    <div
+                        class="
+                            bg-white
+                            dark:bg-slate-900
+                            border
+                            border-slate-200
+                            dark:border-slate-800
+                            rounded-2xl
+                            p-5
+                        "
+                    >
+
+                        <div
+                            class="
+                                flex
+                                items-start
+                                justify-between
+                            "
+                        >
+
+                            <div>
+
+                                <p
+                                    class="
+                                        text-xs
+                                        uppercase
+                                        tracking-wide
+                                        text-slate-400
+                                        font-bold
+                                    "
+                                >
+                                    Currencies
+                                </p>
+
+                                <p
+                                    id="currencyCount"
+                                    class="
+                                        text-2xl
+                                        font-black
+                                        mt-2
+                                    "
+                                >
+                                    —
+                                </p>
+
+                            </div>
+
+                            <div
+                                class="
+                                    w-10
+                                    h-10
+                                    rounded-xl
+                                    bg-indigo-100
+                                    dark:bg-indigo-500/10
+                                    text-indigo-600
+                                    flex
+                                    items-center
+                                    justify-center
+                                "
+                            >
+
+                                <i class="fa-solid fa-earth-americas"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            bg-white
+                            dark:bg-slate-900
+                            border
+                            border-slate-200
+                            dark:border-slate-800
+                            rounded-2xl
+                            p-5
+                        "
+                    >
+
+                        <div
+                            class="
+                                flex
+                                items-start
+                                justify-between
+                            "
+                        >
+
+                            <div>
+
+                                <p
+                                    class="
+                                        text-xs
+                                        uppercase
+                                        tracking-wide
+                                        text-slate-400
+                                        font-bold
+                                    "
+                                >
+                                    Favorites
+                                </p>
+
+                                <p
+                                    id="statFavorites"
+                                    class="
+                                        text-2xl
+                                        font-black
+                                        mt-2
+                                    "
+                                >
+                                    0
+                                </p>
+
+                            </div>
+
+                            <div
+                                class="
+                                    w-10
+                                    h-10
+                                    rounded-xl
+                                    bg-amber-100
+                                    dark:bg-amber-500/10
+                                    text-amber-500
+                                    flex
+                                    items-center
+                                    justify-center
+                                "
+                            >
+
+                                <i class="fa-solid fa-star"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            bg-white
+                            dark:bg-slate-900
+                            border
+                            border-slate-200
+                            dark:border-slate-800
+                            rounded-2xl
+                            p-5
+                        "
+                    >
+
+                        <div
+                            class="
+                                flex
+                                items-start
+                                justify-between
+                            "
+                        >
+
+                            <div>
+
+                                <p
+                                    class="
+                                        text-xs
+                                        uppercase
+                                        tracking-wide
+                                        text-slate-400
+                                        font-bold
+                                    "
+                                >
+                                    Conversions
+                                </p>
+
+                                <p
+                                    id="statConversions"
+                                    class="
+                                        text-2xl
+                                        font-black
+                                        mt-2
+                                    "
+                                >
+                                    0
+                                </p>
+
+                            </div>
+
+                            <div
+                                class="
+                                    w-10
+                                    h-10
+                                    rounded-xl
+                                    bg-sky-100
+                                    dark:bg-sky-500/10
+                                    text-sky-500
+                                    flex
+                                    items-center
+                                    justify-center
+                                "
+                            >
+
+                                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            bg-white
+                            dark:bg-slate-900
+                            border
+                            border-slate-200
+                            dark:border-slate-800
+                            rounded-2xl
+                            p-5
+                        "
+                    >
+
+                        <div
+                            class="
+                                flex
+                                items-start
+                                justify-between
+                            "
+                        >
+
+                            <div>
+
+                                <p
+                                    class="
+                                        text-xs
+                                        uppercase
+                                        tracking-wide
+                                        text-slate-400
+                                        font-bold
+                                    "
+                                >
+                                    API status
+                                </p>
+
+                                <p
+                                    id="statAPI"
+                                    class="
+                                        text-2xl
+                                        font-black
+                                        mt-2
+                                    "
+                                >
+                                    Online
+                                </p>
+
+                            </div>
+
+                            <div
+                                class="
+                                    w-10
+                                    h-10
+                                    rounded-xl
+                                    bg-emerald-100
+                                    dark:bg-emerald-500/10
+                                    text-emerald-500
+                                    flex
+                                    items-center
+                                    justify-center
+                                "
+                            >
+
+                                <i class="fa-solid fa-signal"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     CONVERTER
+                ================================================== -->
+
+                <section
+                    id="converterSection"
+                    class="mb-6"
+                >
+
+                    <div
+                        class="
+                            bg-white
+                            dark:bg-slate-900
+                            border
+                            border-slate-200
+                            dark:border-slate-800
+                            rounded-[2rem]
+                            shadow-sm
+                            overflow-hidden
+                        "
+                    >
+
+                        <div
+                            class="
+                                p-5
+                                md:p-7
+                                border-b
+                                border-slate-200
+                                dark:border-slate-800
+                            "
+                        >
+
+                            <div
+                                class="
+                                    flex
+                                    flex-col
+                                    sm:flex-row
+                                    sm:items-center
+                                    sm:justify-between
+                                    gap-4
+                                "
+                            >
+
+                                <div>
+
+                                    <div
+                                        class="
+                                            flex
+                                            items-center
+                                            gap-2
+                                        "
+                                    >
+
+                                        <span
+                                            class="
+                                                w-9
+                                                h-9
+                                                rounded-xl
+                                                bg-indigo-100
+                                                dark:bg-indigo-500/10
+                                                text-indigo-600
+                                                flex
+                                                items-center
+                                                justify-center
+                                            "
+                                        >
+
+                                            <i class="fa-solid fa-calculator"></i>
+
+                                        </span>
+
+                                        <h2
+                                            class="
+                                                text-xl
+                                                font-black
+                                            "
+                                        >
+                                            Currency Converter
+                                        </h2>
+
+                                    </div>
+
+                                    <p
+                                        class="
+                                            text-sm
+                                            text-slate-400
+                                            mt-2
+                                        "
+                                    >
+                                        Professional real-time conversion.
+                                    </p>
+
+                                </div>
+
+
+                                <div
+                                    class="
+                                        flex
+                                        items-center
+                                        gap-2
+                                    "
+                                >
+
+                                    <button
+                                        id="favoriteCurrent"
+                                        class="
+                                            px-3
+                                            py-2
+                                            rounded-xl
+                                            bg-slate-100
+                                            dark:bg-slate-800
+                                            text-sm
+                                            font-semibold
+                                        "
+                                    >
+
+                                        <i
+                                            class="
+                                                fa-regular
+                                                fa-star
+                                                mr-1
+                                            "
+                                        ></i>
+
+                                        Favorite
+
+                                    </button>
+
+                                    <button
+                                        id="refreshRates"
+                                        class="
+                                            px-3
+                                            py-2
+                                            rounded-xl
+                                            bg-indigo-600
+                                            text-white
+                                            text-sm
+                                            font-semibold
+                                        "
+                                    >
+
+                                        <i
+                                            id="refreshIcon"
+                                            class="
+                                                fa-solid
+                                                fa-rotate
+                                                mr-1
+                                            "
+                                        ></i>
+
+                                        Refresh
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="
+                                p-5
+                                md:p-7
+                            "
+                        >
+
+                            <div
+                                class="
+                                    grid
+                                    lg:grid-cols-[1fr_auto_1fr]
+                                    gap-4
+                                    items-end
+                                "
+                            >
+
+
+                                <!-- FROM -->
+
+                                <div>
+
+                                    <label
+                                        class="
+                                            text-xs
+                                            uppercase
+                                            tracking-wider
+                                            font-bold
+                                            text-slate-400
+                                        "
+                                    >
+                                        You send
+                                    </label>
+
+                                    <div
+                                        class="
+                                            mt-2
+                                            p-4
+                                            rounded-2xl
+                                            bg-slate-50
+                                            dark:bg-slate-800
+                                            border
+                                            border-slate-200
+                                            dark:border-slate-700
+                                        "
+                                    >
+
+                                        <input
+                                            id="amount"
+                                            type="number"
+                                            min="0"
+                                            step="any"
+                                            value="100"
+                                            class="
+                                                w-full
+                                                bg-transparent
+                                                outline-none
+                                                text-4xl
+                                                font-black
+                                                mb-4
+                                            "
+                                        >
+
+                                        <div class="relative">
+
+                                            <select
+                                                id="fromCurrency"
+                                                class="
+                                                    w-full
+                                                    appearance-none
+                                                    bg-white
+                                                    dark:bg-slate-900
+                                                    border
+                                                    border-slate-200
+                                                    dark:border-slate-700
+                                                    rounded-xl
+                                                    px-4
+                                                    py-3
+                                                    outline-none
+                                                    font-semibold
+                                                "
+                                            ></select>
+
+                                            <i
+                                                class="
+                                                    fa-solid
+                                                    fa-chevron-down
+                                                    absolute
+                                                    right-4
+                                                    top-1/2
+                                                    -translate-y-1/2
+                                                    pointer-events-none
+                                                    text-slate-400
+                                                "
+                                            ></i>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- SWAP -->
+
+                                <div class="flex justify-center">
+
+                                    <button
+                                        id="swapCurrencies"
+                                        class="
+                                            w-14
+                                            h-14
+                                            rounded-2xl
+                                            bg-indigo-600
+                                            hover:bg-indigo-700
+                                            text-white
+                                            shadow-lg
+                                            transition
+                                            hover:rotate-180
+                                        "
+                                        title="Swap currencies"
+                                    >
+
+                                        <i
+                                            class="
+                                                fa-solid
+                                                fa-arrow-right-arrow-left
+                                            "
+                                        ></i>
+
+                                    </button>
+
+                                </div>
+
+
+                                <!-- TO -->
+
+                                <div>
+
+                                    <label
+                                        class="
+                                            text-xs
+                                            uppercase
+                                            tracking-wider
+                                            font-bold
+                                            text-slate-400
+                                        "
+                                    >
+                                        You receive
+                                    </label>
+
+                                    <div
+                                        class="
+                                            mt-2
+                                            p-4
+                                            rounded-2xl
+                                            bg-indigo-50
+                                            dark:bg-indigo-500/10
+                                            border
+                                            border-indigo-100
+                                            dark:border-indigo-500/20
+                                        "
+                                    >
+
+                                        <div
+                                            id="convertedAmount"
+                                            class="
+                                                text-4xl
+                                                font-black
+                                                mb-4
+                                            "
+                                        >
+                                            0.00
+                                        </div>
+
+                                        <div class="relative">
+
+                                            <select
+                                                id="toCurrency"
+                                                class="
+                                                    w-full
+                                                    appearance-none
+                                                    bg-white
+                                                    dark:bg-slate-900
+                                                    border
+                                                    border-slate-200
+                                                    dark:border-slate-700
+                                                    rounded-xl
+                                                    px-4
+                                                    py-3
+                                                    outline-none
+                                                    font-semibold
+                                                "
+                                            ></select>
+
+                                            <i
+                                                class="
+                                                    fa-solid
+                                                    fa-chevron-down
+                                                    absolute
+                                                    right-4
+                                                    top-1/2
+                                                    -translate-y-1/2
+                                                    pointer-events-none
+                                                    text-slate-400
+                                                "
+                                            ></i>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Rate information -->
+
+                            <div
+                                class="
+                                    mt-6
+                                    p-4
+                                    rounded-2xl
+                                    bg-slate-50
+                                    dark:bg-slate-800/60
+                                    flex
+                                    flex-col
+                                    md:flex-row
+                                    md:items-center
+                                    md:justify-between
+                                    gap-4
+                                "
+                            >
+
+                                <div>
+
+                                    <p
+                                        class="
+                                            text-xs
+                                            uppercase
+                                            text-slate-400
+                                            font-bold
+                                        "
+                                    >
+                                        Current exchange rate
+                                    </p>
+
+                                    <p
+                                        id="rateText"
+                                        class="
+                                            font-black
+                                            mt-1
+                                        "
+                                    >
+                                        Loading...
+                                    </p>
+
+                                </div>
+
+
+                                <div
+                                    class="
+                                        text-xs
+                                        text-slate-400
+                                    "
+                                >
+
+                                    <i
+                                        class="
+                                            fa-regular
+                                            fa-clock
+                                            mr-1
+                                        "
+                                    ></i>
+
+                                    Last updated:
+
+                                    <span id="updatedAt">
+                                        —
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     CHART + MARKET
+                ================================================== -->
+
+                <section
+                    id="marketSection"
+                    class="
+                        grid
+                        xl:grid-cols-3
+                        gap-6
+                        mb-6
+                    "
+                >
+
+
+                    <!-- CHART -->
+
+                    <div
+                        class="
+                            xl:col-span-2
+                            bg-white
+                            dark:bg-slate-900
+                            border
+                            border-slate-200
+                            dark:border-slate-800
+                            rounded-[2rem]
+                            p-5
+                            md:p-7
+                        "
+                    >
+
+                        <div
+                            class="
+                                flex
+                                flex-col
+                                sm:flex-row
+                                sm:items-center
+                                sm:justify-between
+                                gap-4
+                                mb-5
+                            "
+                        >
+
+                            <div>
+
+                                <h2
+                                    class="
+                                        text-xl
+                                        font-black
+                                    "
+                                >
+                                    Exchange Rate Trend
+                                </h2>
+
+                                <p
+                                    id="chartPair"
+                                    class="
+                                        text-sm
+                                        text-slate-400
+                                        mt-1
+                                    "
+                                >
+                                    Loading pair...
+                                </p>
+
+                            </div>
+
+
+                            <div
+                                class="
+                                    flex
+                                    items-center
+                                    gap-1
+                                    p-1
+                                    bg-slate-100
+                                    dark:bg-slate-800
+                                    rounded-xl
+                                "
+                            >
+
+                                <button
+                                    class="
+                                        chartRange
+                                        px-3
+                                        py-1.5
+                                        rounded-lg
+                                        bg-white
+                                        dark:bg-slate-700
+                                        shadow
+                                        text-xs
+                                        font-bold
+                                    "
+                                    data-range="1M"
+                                >
+                                    1M
+                                </button>
+
+                                <button
+                                    class="
+                                        chartRange
+                                        px-3
+                                        py-1.5
+                                        rounded-lg
+                                        text-xs
+                                        font-bold
+                                        text-slate-400
+                                    "
+                                    data-range="3M"
+                                >
+                                    3M
+                                </button>
+
+                                <button
+                                    class="
+                                        chartRange
+                                        px-3
+                                        py-1.5
+                                        rounded-lg
+                                        text-xs
+                                        font-bold
+                                        text-slate-400
+                                    "
+                                    data-range="6M"
+                                >
+                                    6M
+                                </button>
+
+                                <button
+                                    class="
+                                        chartRange
+                                        px-3
+                                        py-1.5
+                                        rounded-lg
+                                        text-xs
+                                        font-bold
+                                        text-slate-400
+                                    "
+                                    data-range="1Y"
+                                >
+                                    1Y
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="
+                                relative
+                                h-72
+                                rounded-2xl
+                                overflow-hidden
+                                chart-grid
+                            "
+                        >
+
+                            <canvas
+                                id="rateChart"
+                                class="
+                                    absolute
+                                    inset-0
+                                    w-full
+                                    h-full
+                                "
+                            ></canvas>
+
+                            <div
+                                id="chartLoading"
+                                class="
+                                    absolute
+                                    inset-0
+                                    flex
+                                    items-center
+                                    justify-center
+                                    bg-white/50
+                                    dark:bg-slate-900/50
+                                    glass
+                                "
+                            >
+
+                                <div
+                                    class="
+                                        text-center
+                                        text-slate-400
+                                    "
+                                >
+
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-chart-line
+                                            text-3xl
+                                            mb-3
+                                        "
+                                    ></i>
+
+                                    <p class="text-sm">
+                                        Loading market data...
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MARKET CARDS -->
+
+                    <div
+                        class="
+                            bg-white
+                            dark:bg-slate-900
+                            border
+                            border-slate-200
+                            dark:border-slate-800
+                            rounded-[2rem]
+                            p-5
+                            md:p-7
+                        "
+                    >
+
+                        <div
+                            class="
+                                flex
+                                items-center
+                                justify-between
+                                mb-5
+                            "
+                        >
+
+                            <div>
+
+                                <h2 class="text-xl font-black">
+                                    Market Overview
+                                </h2>
+
+                                <p
+                                    class="
+                                        text-sm
+                                        text-slate-400
+                                        mt-1
+                                    "
+                                >
+                                    Popular pairs
+                                </p>
+
+                            </div>
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-chart-simple
+                                    text-indigo-500
+                                "
+                            ></i>
+
+                        </div>
+
+
+                        <div
+                            id="marketCards"
+                            class="space-y-3"
+                        >
+
+                            <!-- JavaScript inserts cards -->
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     FAVORITES + HISTORY
+                ================================================== -->
+
+                <section
+                    class="
+                        grid
+                        xl:grid-cols-2
+                        gap-6
+                    "
+                >
+
+
+                    <!-- FAVORITES -->
+
+                    <div
+                        id="favoritesSection"
+                        class="
+                            bg-white
+                            dark:bg-slate-900
+                            border
+                            border-slate-200
+                            dark:border-slate-800
+                            rounded-[2rem]
+                            overflow-hidden
+                        "
+                    >
+
+                        <div
+                            class="
+                                p-5
+                                md:p-7
+                                border-b
+                                border-slate-200
+                                dark:border-slate-800
+                                flex
+                                items-center
+                                justify-between
+                            "
+                        >
+
+                            <div>
+
+                                <h2
+                                    class="
+                                        text-xl
+                                        font-black
+                                    "
+                                >
+                                    Favorite Pairs
+                                </h2>
+
+                                <p
+                                    class="
+                                        text-sm
+                                        text-slate-400
+                                        mt-1
+                                    "
+                                >
+                                    Your frequently used currencies.
+                                </p>
+
+                            </div>
+
+                            <span
+                                id="favoriteBadge"
+                                class="
+                                    px-3
+                                    py-1
+                                    rounded-full
+                                    bg-amber-100
+                                    dark:bg-amber-500/10
+                                    text-amber-600
+                                    text-xs
+                                    font-bold
+                                "
+                            >
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="favoritesList"
+                            class="p-4"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- HISTORY -->
+
+                    <div
+                        id="historySection"
+                        class="
+                            bg-white
+                            dark:bg-slate-900
+                            border
+                            border-slate-200
+                            dark:border-slate-800
+                            rounded-[2rem]
+                            overflow-hidden
+                        "
+                    >
+
+                        <div
+                            class="
+                                p-5
+                                md:p-7
+                                border-b
+                                border-slate-200
+                                dark:border-slate-800
+                                flex
+                                items-center
+                                justify-between
+                            "
+                        >
+
+                            <div>
+
+                                <h2
+                                    class="
+                                        text-xl
+                                        font-black
+                                    "
+                                >
+                                    Recent Conversions
+                                </h2>
+
+                                <p
+                                    class="
+                                        text-sm
+                                        text-slate-400
+                                        mt-1
+                                    "
+                                >
+                                    Your latest calculations.
+                                </p>
+
+                            </div>
+
+                            <button
+                                id="clearHistory"
+                                class="
+                                    text-xs
+                                    text-red-500
+                                    font-bold
+                                    hover:underline
+                                "
+                            >
+                                Clear all
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            id="historyList"
+                            class="p-4"
+                        ></div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     FOOTER
+                ================================================== -->
+
+                <footer
+                    class="
+                        mt-10
+                        py-6
+                        border-t
+                        border-slate-200
+                        dark:border-slate-800
+                        flex
+                        flex-col
+                        md:flex-row
+                        md:items-center
+                        md:justify-between
+                        gap-3
+                        text-xs
+                        text-slate-400
+                    "
+                >
+
+                    <p>
+
+                        © 2026 GlobalFX Pro
+
+                    </p>
+
+                    <p>
+
+                        Exchange-rate data provided by
+                        Frankfurter.
+
+                    </p>
+
+                </footer>
+
+            </div>
+
+        </main>
+
+
+        <!-- =====================================================
+             MOBILE BOTTOM NAVIGATION
+        ====================================================== -->
+
+        <nav
+            class="
+                lg:hidden
+                fixed
+                bottom-0
+                left-0
+                right-0
+                z-50
+                h-16
+                bg-white/95
+                dark:bg-slate-950/95
+                glass
+                border-t
+                border-slate-200
+                dark:border-slate-800
+                flex
+                items-center
+                justify-around
+            "
+        >
+
+            <a
+                href="#dashboardSection"
+                class="
+                    flex
+                    flex-col
+                    items-center
+                    gap-1
+                    text-indigo-600
+                    text-xs
+                    font-bold
+                "
+            >
+
+                <i class="fa-solid fa-grid-2"></i>
+
+                Home
+
+            </a>
+
+            <a
+                href="#converterSection"
+                class="
+                    flex
+                    flex-col
+                    items-center
+                    gap-1
+                    text-slate-400
+                    text-xs
+                    font-bold
+                "
+            >
+
+                <i class="fa-solid fa-calculator"></i>
+
+                Convert
+
+            </a>
+
+            <a
+                href="#favoritesSection"
+                class="
+                    flex
+                    flex-col
+                    items-center
+                    gap-1
+                    text-slate-400
+                    text-xs
+                    font-bold
+                "
+            >
+
+                <i class="fa-solid fa-star"></i>
+
+                Favorites
+
+            </a>
+
+            <a
+                href="#historySection"
+                class="
+                    flex
+                    flex-col
+                    items-center
+                    gap-1
+                    text-slate-400
+                    text-xs
+                    font-bold
+                "
+            >
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                History
+
+            </a>
+
+        </nav>
+
+    </div>
+
+
+    <!-- =========================================================
+         TOAST
+    ========================================================== -->
+
+    <div
+        id="toast"
+        class="
+            hidden
+            fixed
+            right-4
+            bottom-20
+            lg:bottom-6
+            z-[100]
+            max-w-sm
+            bg-slate-900
+            text-white
+            rounded-2xl
+            px-5
+            py-4
+            shadow-2xl
+            animate-slide
+        "
+    >
+
+        <div class="flex items-center gap-3">
+
+            <div
+                id="toastIconBox"
+                class="
+                    w-9
+                    h-9
+                    rounded-xl
+                    bg-emerald-500/20
+                    text-emerald-400
+                    flex
+                    items-center
+                    justify-center
+                "
+            >
+
+                <i
+                    id="toastIcon"
+                    class="fa-solid fa-check"
+                ></i>
+
+            </div>
+
+            <p
+                id="toastMessage"
+                class="text-sm font-semibold"
+            >
+                Done
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script>
+
+        /* =======================================================
+           EXCHANGERATE-API CONFIGURATION
+        ======================================================== */
+
+        /*
+            Live currency provider.
+
+            /codes
+                Loads supported currency codes and names.
+
+            /latest/{BASE}
+                Loads the latest rates for the selected base currency.
+
+            IMPORTANT:
+            Because this is a single HTML file, the API key is visible
+            in browser JavaScript. For production, use a backend proxy
+            so the key is not publicly exposed.
+        */
+
+        const EXCHANGE_RATE_API_KEY =
+            "79c2f3acb126770ca9202ed8";
+
+        const API_BASE =
+            `https://v6.exchangerate-api.com/v6/${EXCHANGE_RATE_API_KEY}`;
+
+        const API_TIMEOUT =
+            15000;
+
+
+        /* =======================================================
+           LOCAL STORAGE KEYS
+        ======================================================== */
+
+        const STORAGE = {
+
+            user:
+                "globalfx_pro_user",
+
+            loggedIn:
+                "globalfx_pro_logged_in",
+
+            favorites:
+                "globalfx_pro_favorites",
+
+            history:
+                "globalfx_pro_history",
+
+            theme:
+                "globalfx_pro_theme"
+
+        };
+
+
+        /* =======================================================
+           APPLICATION STATE
+        ======================================================== */
+
+        let currencies = {};
+
+        let currentRates = {};
+
+        let currentRate = 0;
+
+        let favorites =
+            JSON.parse(
+                localStorage.getItem(
+                    STORAGE.favorites
+                )
+            ) || [];
+
+        let history =
+            JSON.parse(
+                localStorage.getItem(
+                    STORAGE.history
+                )
+            ) || [];
+
+        let chartRange = "1M";
+
+        let authMode = "login";
+
+
+        /* =======================================================
+           DOM HELPERS
+        ======================================================== */
+
+        const $ = selector =>
+            document.querySelector(selector);
+
+
+        const $$ = selector =>
+            document.querySelectorAll(selector);
+
+
+        /* =======================================================
+           DOM ELEMENTS
+        ======================================================== */
+
+        const authScreen =
+            $("#authScreen");
+
+        const mainApp =
+            $("#mainApp");
+
+        const authForm =
+            $("#authForm");
+
+        const authLoginTab =
+            $("#authLoginTab");
+
+        const authRegisterTab =
+            $("#authRegisterTab");
+
+        const authNameWrapper =
+            $("#authNameWrapper");
+
+        const authName =
+            $("#authName");
+
+        const authEmail =
+            $("#authEmail");
+
+        const authPassword =
+            $("#authPassword");
+
+        const authSubmit =
+            $("#authSubmit");
+
+        const authTitle =
+            $("#authTitle");
+
+        const authSubtitle =
+            $("#authSubtitle");
+
+        const emailValidation =
+            $("#emailValidation");
+
+        const amount =
+            $("#amount");
+
+        const fromCurrency =
+            $("#fromCurrency");
+
+        const toCurrency =
+            $("#toCurrency");
+
+        const convertedAmount =
+            $("#convertedAmount");
+
+        const rateText =
+            $("#rateText");
+
+        const updatedAt =
+            $("#updatedAt");
+
+        const refreshIcon =
+            $("#refreshIcon");
+
+        const chartCanvas =
+            $("#rateChart");
+
+        const chartLoading =
+            $("#chartLoading");
+
+        const toast =
+            $("#toast");
+
+
+        /* =======================================================
+           TOAST FUNCTION
+        ======================================================== */
+
+        function showToast(
+            message,
+            type = "success"
+        ) {
+
+            $("#toastMessage").textContent =
+                message;
+
+
+            if (type === "error") {
+
+                $("#toastIcon").className =
+                    "fa-solid fa-circle-exclamation";
+
+                $("#toastIconBox").className =
+                    `
+                    w-9
+                    h-9
+                    rounded-xl
+                    bg-red-500/20
+                    text-red-400
+                    flex
+                    items-center
+                    justify-center
+                    `;
+
+            } else {
+
+                $("#toastIcon").className =
+                    "fa-solid fa-check";
+
+                $("#toastIconBox").className =
+                    `
+                    w-9
+                    h-9
+                    rounded-xl
+                    bg-emerald-500/20
+                    text-emerald-400
+                    flex
+                    items-center
+                    justify-center
+                    `;
+
+            }
+
+
+            toast.classList.remove("hidden");
+
+
+            clearTimeout(
+                window.toastTimer
+            );
+
+
+            window.toastTimer =
+                setTimeout(
+                    () => {
+
+                        toast.classList.add(
+                            "hidden"
+                        );
+
+                    },
+                    3200
+                );
+
+        }
+
+
+        /* =======================================================
+           SAVE APPLICATION DATA
+        ======================================================== */
+
+        function saveData() {
+
+            localStorage.setItem(
+                STORAGE.favorites,
+                JSON.stringify(favorites)
+            );
+
+            localStorage.setItem(
+                STORAGE.history,
+                JSON.stringify(history)
+            );
+
+        }
+
+
+        /* =======================================================
+           LOCAL RATE SNAPSHOTS
+        ======================================================== */
+
+        /*
+            ExchangeRate-API's latest endpoint provides current
+            rates. This single-file application therefore stores
+            observed rates locally for the chart.
+
+            The chart does NOT pretend these are historical API
+            values; they are snapshots collected by this browser.
+        */
+
+        const RATE_SNAPSHOTS_KEY =
+            "globalfx_pro_rate_snapshots";
+
+        function getRateSnapshots() {
+
+            return JSON.parse(
+                localStorage.getItem(
+                    RATE_SNAPSHOTS_KEY
+                )
+            ) || {};
+
+        }
+
+        function saveRateSnapshot(
+            base,
+            quote,
+            rate
+        ) {
+
+            if (
+                !quote ||
+                typeof rate !== "number" ||
+                !Number.isFinite(rate)
+            ) {
+                return;
+            }
+
+            const snapshots =
+                getRateSnapshots();
+
+            const pair =
+                `${base}_${quote}`;
+
+            if (!snapshots[pair]) {
+                snapshots[pair] = [];
+            }
+
+            snapshots[pair].push({
+                date:
+                    new Date().toISOString(),
+
+                value:
+                    rate
+            });
+
+            snapshots[pair] =
+                snapshots[pair].slice(-500);
+
+            localStorage.setItem(
+                RATE_SNAPSHOTS_KEY,
+                JSON.stringify(snapshots)
+            );
+
+        }
+
+        function getChartSnapshotData(
+            base,
+            quote
+        ) {
+
+            const snapshots =
+                getRateSnapshots();
+
+            const pair =
+                `${base}_${quote}`;
+
+            const rangeDays = {
+                "1M": 31,
+                "3M": 93,
+                "6M": 186,
+                "1Y": 366
+            }[chartRange] || 31;
+
+            const cutoff =
+                Date.now() -
+                rangeDays *
+                24 *
+                60 *
+                60 *
+                1000;
+
+            return (
+                snapshots[pair] || []
+            )
+                .filter(
+                    item =>
+                        new Date(
+                            item.date
+                        ).getTime() >= cutoff
+                )
+                .map(
+                    item => ({
+                        date: item.date,
+                        value: Number(item.value)
+                    })
+                )
+                .filter(
+                    item =>
+                        Number.isFinite(item.value)
+                );
+
+        }
+
+
+        /* =======================================================
+           EMAIL VALIDATION
+        ======================================================== */
+
+        function validEmail(email) {
+
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                .test(email);
+
+        }
+
+
+        /* =======================================================
+           AUTH TAB — LOGIN
+        ======================================================== */
+
+        authLoginTab.addEventListener(
+            "click",
+            () => {
+
+                authMode = "login";
+
+                authNameWrapper
+                    .classList
+                    .add("hidden");
+
+
+                authLoginTab.classList.add(
+                    "bg-white",
+                    "dark:bg-slate-700",
+                    "shadow"
+                );
+
+
+                authRegisterTab.classList.remove(
+                    "bg-white",
+                    "dark:bg-slate-700",
+                    "shadow"
+                );
+
+
+                authTitle.textContent =
+                    "Welcome back";
+
+
+                authSubtitle.textContent =
+                    "Sign in to your GlobalFX dashboard.";
+
+
+                authSubmit.innerHTML =
+                    `
+                    <i
+                        class="
+                            fa-solid
+                            fa-right-to-bracket
+                            mr-2
+                        "
+                    ></i>
+                    Sign in
+                    `;
+
+            }
+        );
+
+
+        /* =======================================================
+           AUTH TAB — REGISTER
+        ======================================================== */
+
+        authRegisterTab.addEventListener(
+            "click",
+            () => {
+
+                authMode = "register";
+
+                authNameWrapper
+                    .classList
+                    .remove("hidden");
+
+
+                authRegisterTab.classList.add(
+                    "bg-white",
+                    "dark:bg-slate-700",
+                    "shadow"
+                );
+
+
+                authLoginTab.classList.remove(
+                    "bg-white",
+                    "dark:bg-slate-700",
+                    "shadow"
+                );
+
+
+                authTitle.textContent =
+                    "Create your account";
+
+
+                authSubtitle.textContent =
+                    "Start using your global currency dashboard.";
+
+
+                authSubmit.innerHTML =
+                    `
+                    <i
+                        class="
+                            fa-solid
+                            fa-user-plus
+                            mr-2
+                        "
+                    ></i>
+                    Create account
+                    `;
+
+            }
+        );
+
+
+        /* =======================================================
+           PASSWORD SHOW / HIDE
+        ======================================================== */
+
+        $("#authPasswordToggle")
+            .addEventListener(
+                "click",
+                () => {
+
+                    const visible =
+                        authPassword.type ===
+                        "text";
+
+
+                    authPassword.type =
+                        visible
+                            ? "password"
+                            : "text";
+
+
+                    $("#authPasswordToggle")
+                        .innerHTML =
+                        visible
+                            ? '<i class="fa-solid fa-eye"></i>'
+                            : '<i class="fa-solid fa-eye-slash"></i>';
+
+                }
+            );
+
+
+        /* =======================================================
+           AUTH FORM
+        ======================================================== */
+
+        authForm.addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+
+                const email =
+                    authEmail.value
+                        .trim()
+                        .toLowerCase();
+
+
+                const password =
+                    authPassword.value;
+
+
+                const name =
+                    authName.value.trim();
+
+
+                /* Validate email */
+
+                if (!validEmail(email)) {
+
+                    emailValidation
+                        .classList
+                        .remove("hidden");
+
+                    showToast(
+                        "Please enter a valid email address.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                emailValidation
+                    .classList
+                    .add("hidden");
+
+
+                /* Validate password */
+
+                if (password.length < 6) {
+
+                    showToast(
+                        "Password must contain at least 6 characters.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                /* Register */
+
+                if (authMode === "register") {
+
+                    if (!name) {
+
+                        showToast(
+                            "Please enter your full name.",
+                            "error"
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                        IMPORTANT:
+
+                        This is a browser-only demo.
+
+                        We deliberately do NOT store the password.
+
+                        Real production authentication should use
+                        Firebase, Supabase, Auth0, or your own backend.
+                    */
+
+                    localStorage.setItem(
+                        STORAGE.user,
+                        JSON.stringify({
+                            name,
+                            email
+                        })
+                    );
+
+
+                    localStorage.setItem(
+                        STORAGE.loggedIn,
+                        "true"
+                    );
+
+
+                    showApp();
+
+                    showToast(
+                        "Account created successfully."
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* Login */
+
+                const savedUser =
+                    JSON.parse(
+                        localStorage.getItem(
+                            STORAGE.user
+                        )
+                    );
+
+
+                /*
+                    If a local account exists,
+                    verify the email.
+
+                    Password is intentionally not persisted
+                    in this frontend-only demo.
+                */
+
+                if (
+                    savedUser &&
+                    savedUser.email !== email
+                ) {
+
+                    showToast(
+                        "Email does not match the saved demo account.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                    If no local account exists,
+                    create a demo session.
+                */
+
+                if (!savedUser) {
+
+                    localStorage.setItem(
+                        STORAGE.user,
+                        JSON.stringify({
+                            name:
+                                email.split("@")[0],
+                            email
+                        })
+                    );
+
+                }
+
+
+                localStorage.setItem(
+                    STORAGE.loggedIn,
+                    "true"
+                );
+
+
+                showApp();
+
+                showToast(
+                    "Welcome to GlobalFX Pro."
+                );
+
+            }
+        );
+
+
+        /* =======================================================
+           SHOW MAIN APPLICATION
+        ======================================================== */
+
+        async function showApp() {
+
+            authScreen.classList.add(
+                "hidden"
+            );
+
+            mainApp.classList.remove(
+                "hidden"
+            );
+
+
+            loadUserProfile();
+
+            loadTheme();
+
+            updateStats();
+
+            await loadCurrencies();
+
+            await refreshRates();
+
+            renderFavorites();
+
+            renderHistory();
+
+            renderMarketCards();
+
+            loadChart();
+
+        }
+
+
+        /* =======================================================
+           LOAD USER PROFILE
+        ======================================================== */
+
+        function loadUserProfile() {
+
+            const user =
+                JSON.parse(
+                    localStorage.getItem(
+                        STORAGE.user
+                    )
+                );
+
+
+            if (!user) {
+
+                return;
+
+            }
+
+
+            const name =
+                user.name || "User";
+
+
+            $("#profileName")
+                .textContent = name;
+
+
+            $("#menuUserName")
+                .textContent = name;
+
+
+            $("#menuUserEmail")
+                .textContent =
+                user.email || "";
+
+
+            $("#profileAvatar")
+                .textContent =
+                name
+                    .charAt(0)
+                    .toUpperCase();
+
+        }
+
+
+        /* =======================================================
+           LOGOUT
+        ======================================================== */
+
+        $("#logoutButton")
+            .addEventListener(
+                "click",
+                () => {
+
+                    localStorage.removeItem(
+                        STORAGE.loggedIn
+                    );
+
+
+                    mainApp.classList.add(
+                        "hidden"
+                    );
+
+                    authScreen.classList.remove(
+                        "hidden"
+                    );
+
+
+                    $("#profileMenu")
+                        .classList
+                        .add("hidden");
+
+
+                    showToast(
+                        "You have been signed out."
+                    );
+
+                }
+            );
+
+
+        /* =======================================================
+           PROFILE MENU
+        ======================================================== */
+
+        $("#profileButton")
+            .addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                    $("#profileMenu")
+                        .classList
+                        .toggle("hidden");
+
+                }
+            );
+
+
+        document.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    !event.target.closest(
+                        "#profileButton"
+                    ) &&
+                    !event.target.closest(
+                        "#profileMenu"
+                    )
+                ) {
+
+                    $("#profileMenu")
+                        .classList
+                        .add("hidden");
+
+                }
+
+            }
+        );
+
+
+        /* =======================================================
+           LOAD WORLDWIDE CURRENCIES
+        ======================================================== */
+
+        async function loadCurrencies() {
+
+            try {
+
+                setAPIStatus("loading");
+
+                const controller =
+                    new AbortController();
+
+                const timeout =
+                    setTimeout(
+                        () => controller.abort(),
+                        API_TIMEOUT
+                    );
+
+                /*
+                    ExchangeRate-API /codes response:
+
+                    {
+                        "result": "success",
+                        "supported_codes": [
+                            ["USD", "United States Dollar"],
+                            ["PKR", "Pakistani Rupee"]
+                        ]
+                    }
+                */
+
+                const response =
+                    await fetch(
+                        `${API_BASE}/codes`,
+                        {
+                            cache: "no-store",
+                            signal: controller.signal
+                        }
+                    );
+
+                clearTimeout(timeout);
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Currency API failed: ${response.status}`
+                    );
+                }
+
+                const data =
+                    await response.json();
+
+                if (
+                    data.result !== "success"
+                ) {
+                    throw new Error(
+                        data["error-type"] ||
+                        "ExchangeRate-API returned an error."
+                    );
+                }
+
+                currencies = {};
+
+                (data.supported_codes || [])
+                    .forEach(
+                        currency => {
+
+                            const code =
+                                currency[0];
+
+                            const name =
+                                currency[1];
+
+                            currencies[code] = {
+                                code: code,
+                                name: name,
+                                symbol: "",
+                                numeric: ""
+                            };
+
+                        }
+                    );
+
+                $("#currencyCount")
+                    .textContent =
+                    Object.keys(
+                        currencies
+                    ).length;
+
+                populateCurrencySelects();
+
+                setAPIStatus("online");
+
+            } catch (error) {
+
+                console.error(
+                    "Currency loading error:",
+                    error
+                );
+
+                setAPIStatus("offline");
+
+                showToast(
+                    "Unable to load worldwide currencies from ExchangeRate-API.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        /* =======================================================
+           POPULATE CURRENCY SELECTS
+        ======================================================== */
+
+        function populateCurrencySelects() {
+
+            const codes =
+                Object.keys(
+                    currencies
+                ).sort();
+
+
+            fromCurrency.innerHTML = "";
+
+            toCurrency.innerHTML = "";
+
+
+            codes.forEach(code => {
+
+                const currency =
+                    currencies[code];
+
+
+                const fromOption =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                fromOption.value =
+                    code;
+
+
+                fromOption.textContent =
+                    `${code} — ${currency.name}`;
+
+
+                fromCurrency.appendChild(
+                    fromOption
+                );
+
+
+                const toOption =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                toOption.value =
+                    code;
+
+
+                toOption.textContent =
+                    `${code} — ${currency.name}`;
+
+
+                toCurrency.appendChild(
+                    toOption
+                );
+
+            });
+
+
+            /*
+                Default selection.
+
+                USD → PKR
+            */
+
+            if (
+                currencies.USD
+            ) {
+
+                fromCurrency.value =
+                    "USD";
+
+            }
+
+
+            if (
+                currencies.PKR
+            ) {
+
+                toCurrency.value =
+                    "PKR";
+
+            }
+
+        }
+
+
+        /* =======================================================
+           FETCH LIVE RATES
+        ======================================================== */
+
+        async function refreshRates() {
+
+            const base =
+                fromCurrency.value;
+
+            if (!base) {
+                return;
+            }
+
+            try {
+
+                setAPIStatus("loading");
+
+                refreshIcon.classList.add(
+                    "fa-spin"
+                );
+
+                /*
+                    ExchangeRate-API endpoint:
+
+                    https://v6.exchangerate-api.com/v6/API_KEY/latest/USD
+
+                    For another base:
+                    /latest/EUR
+                    /latest/PKR
+                    etc.
+                */
+
+                const controller =
+                    new AbortController();
+
+                const timeout =
+                    setTimeout(
+                        () => controller.abort(),
+                        API_TIMEOUT
+                    );
+
+                const response =
+                    await fetch(
+                        `${API_BASE}/latest/${encodeURIComponent(base)}`,
+                        {
+                            cache: "no-store",
+                            signal: controller.signal
+                        }
+                    );
+
+                clearTimeout(timeout);
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Rate request failed: ${response.status}`
+                    );
+                }
+
+                const data =
+                    await response.json();
+
+                if (
+                    data.result !== "success"
+                ) {
+                    throw new Error(
+                        data["error-type"] ||
+                        "ExchangeRate-API returned an error."
+                    );
+                }
+
+                /*
+                    ExchangeRate-API returns all rates inside
+                    conversion_rates.
+
+                    Example:
+
+                    conversion_rates: {
+                        "EUR": 0.85,
+                        "GBP": 0.74,
+                        "PKR": 280.00
+                    }
+                */
+
+                currentRates = {
+                    [base]: 1
+                };
+
+                Object.entries(
+                    data.conversion_rates || {}
+                ).forEach(
+                    ([code, rate]) => {
+
+                        currentRates[code] =
+                            Number(rate);
+
+                    }
+                );
+
+                updatedAt.textContent =
+                    data.time_last_update_utc
+                        ? new Date(
+                            data.time_last_update_utc
+                        ).toLocaleString()
+                        : new Date()
+                            .toLocaleTimeString();
+
+                /*
+                    Save a local snapshot so the chart can
+                    build its own history over time.
+                */
+
+                saveRateSnapshot(
+                    base,
+                    toCurrency.value,
+                    currentRates[
+                        toCurrency.value
+                    ]
+                );
+
+                setAPIStatus("online");
+
+                convert();
+
+                renderMarketCards();
+
+                loadChart();
+
+            } catch (error) {
+
+                console.error(
+                    "ExchangeRate-API rate error:",
+                    error
+                );
+
+                setAPIStatus("offline");
+
+                showToast(
+                    error.name === "AbortError"
+                        ? "ExchangeRate-API request timed out."
+                        : "Could not retrieve live exchange rates.",
+                    "error"
+                );
+
+            } finally {
+
+                refreshIcon.classList.remove(
+                    "fa-spin"
+                );
+
+            }
+
+        }
+
+
+        /* =======================================================
+           CONVERSION
+        ======================================================== */
+
+        function convert() {
+
+            const value =
+                Number(
+                    amount.value
+                ) || 0;
+
+
+            const from =
+                fromCurrency.value;
+
+
+            const to =
+                toCurrency.value;
+
+
+            if (
+                !from ||
+                !to
+            ) {
+
+                return;
+
+            }
+
+
+            let rate;
+
+
+            /*
+                Same currency = 1.
+            */
+
+            if (from === to) {
+
+                rate = 1;
+
+            } else {
+
+                rate =
+                    currentRates[to];
+
+            }
+
+
+            /*
+                The API may not return a direct quote in every
+                unusual scenario. We show a safe fallback state.
+            */
+
+            if (
+                typeof rate !== "number" ||
+                !Number.isFinite(rate)
+            ) {
+
+                convertedAmount.textContent =
+                    "—";
+
+                rateText.textContent =
+                    "Rate unavailable";
+
+                return;
+
+            }
+
+
+            currentRate =
+                rate;
+
+
+            const result =
+                value * rate;
+
+
+            convertedAmount.textContent =
+                formatNumber(
+                    result
+                );
+
+
+            rateText.textContent =
+                `1 ${from} = ${formatNumber(rate)} ${to}`;
+
+
+            $("#chartPair")
+                .textContent =
+                `${from} / ${to}`;
+
+
+            /*
+                Update hero card.
+            */
+
+            $("#heroPKRRate")
+                .textContent =
+                `1 USD = ${
+                    currentRates.PKR
+                        ? formatNumber(
+                            currentRates.PKR
+                        )
+                        : "—"
+                } PKR`;
+
+
+            updateFavoriteButton();
+
+        }
+
+
+        /* =======================================================
+           FORMAT NUMBER
+        ======================================================== */
+
+        function formatNumber(
+            number
+        ) {
+
+            if (
+                !Number.isFinite(
+                    number
+                )
+            ) {
+
+                return "0.00";
+
+            }
+
+
+            return new Intl.NumberFormat(
+                undefined,
+                {
+                    maximumFractionDigits:
+                        6
+                }
+            ).format(
+                number
+            );
+
+        }
+
+
+        /* =======================================================
+           CONVERTER EVENTS
+        ======================================================== */
+
+        amount.addEventListener(
+            "input",
+            () => {
+
+                convert();
+
+            }
+        );
+
+
+        fromCurrency.addEventListener(
+            "change",
+            async () => {
+
+                await refreshRates();
+
+            }
+        );
+
+
+        toCurrency.addEventListener(
+            "change",
+            () => {
+
+                convert();
+
+            }
+        );
+
+
+        /* =======================================================
+           SWAP
+        ======================================================== */
+
+        $("#swapCurrencies")
+            .addEventListener(
+                "click",
+                async () => {
+
+                    const oldFrom =
+                        fromCurrency.value;
+
+
+                    fromCurrency.value =
+                        toCurrency.value;
+
+
+                    toCurrency.value =
+                        oldFrom;
+
+
+                    await refreshRates();
+
+
+                    showToast(
+                        "Currencies swapped."
+                    );
+
+                }
+            );
+
+
+        /* =======================================================
+           REFRESH
+        ======================================================== */
+
+        $("#refreshRates")
+            .addEventListener(
+                "click",
+                refreshRates
+            );
+
+
+        /* =======================================================
+           USE PKR
+        ======================================================== */
+
+        $("#heroPKRButton")
+            .addEventListener(
+                "click",
+                async () => {
+
+                    if (
+                        currencies.PKR
+                    ) {
+
+                        fromCurrency.value =
+                            "USD";
+
+                        toCurrency.value =
+                            "PKR";
+
+                        await refreshRates();
+
+                        document
+                            .getElementById(
+                                "converterSection"
+                            )
+                            .scrollIntoView({
+                                behavior:
+                                    "smooth"
+                            });
+
+                    }
+
+                }
+            );
+
+
+        /* =======================================================
+           FAVORITE KEY
+        ======================================================== */
+
+        function currentPair() {
+
+            return (
+                `${fromCurrency.value}_${toCurrency.value}`
+            );
+
+        }
+
+
+        /* =======================================================
+           ADD CURRENT FAVORITE
+        ======================================================== */
+
+        function addCurrentFavorite() {
+
+            const pair =
+                currentPair();
+
+
+            if (
+                !favorites.includes(
+                    pair
+                )
+            ) {
+
+                favorites.push(
+                    pair
+                );
+
+
+                saveData();
+
+                renderFavorites();
+
+                updateStats();
+
+                updateFavoriteButton();
+
+
+                showToast(
+                    "Currency pair added to favorites."
+                );
+
+            } else {
+
+                favorites =
+                    favorites.filter(
+                        item =>
+                            item !== pair
+                    );
+
+
+                saveData();
+
+                renderFavorites();
+
+                updateStats();
+
+                updateFavoriteButton();
+
+
+                showToast(
+                    "Currency pair removed."
+                );
+
+            }
+
+        }
+
+
+        $("#favoriteCurrent")
+            .addEventListener(
+                "click",
+                addCurrentFavorite
+            );
+
+
+        /* =======================================================
+           FAVORITE BUTTON STATE
+        ======================================================== */
+
+        function updateFavoriteButton() {
+
+            const pair =
+                currentPair();
+
+
+            const button =
+                $("#favoriteCurrent");
+
+
+            if (
+                favorites.includes(
+                    pair
+                )
+            ) {
+
+                button.innerHTML =
+                    `
+                    <i
+                        class="
+                            fa-solid
+                            fa-star
+                            mr-1
+                        "
+                    ></i>
+                    Favorited
+                    `;
+
+            } else {
+
+                button.innerHTML =
+                    `
+                    <i
+                        class="
+                            fa-regular
+                            fa-star
+                            mr-1
+                        "
+                    ></i>
+                    Favorite
+                    `;
+
+            }
+
+        }
+
+
+        /* =======================================================
+           RENDER FAVORITES
+        ======================================================== */
+
+        function renderFavorites() {
+
+            const container =
+                $("#favoritesList");
+
+
+            $("#favoriteBadge")
+                .textContent =
+                favorites.length;
+
+
+            if (
+                favorites.length === 0
+            ) {
+
+                container.innerHTML =
+                    `
+                    <div
+                        class="
+                            text-center
+                            py-10
+                            text-slate-400
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-regular
+                                fa-star
+                                text-3xl
+                                mb-3
+                            "
+                        ></i>
+
+                        <p class="text-sm">
+                            No favorite pairs yet.
+                        </p>
+
+                        <p class="
+                            text-xs
+                            mt-1
+                        ">
+                            Add a pair using the Favorite button.
+                        </p>
+
+                    </div>
+                    `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                "";
+
+
+            favorites.forEach(
+                pair => {
+
+                    const [
+                        from,
+                        to
+                    ] =
+                        pair.split("_");
+
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    row.className =
+                        `
+                        currency-row
+                        flex
+                        items-center
+                        justify-between
+                        gap-4
+                        p-4
+                        rounded-2xl
+                        hover:bg-slate-50
+                        dark:hover:bg-slate-800
+                        cursor-pointer
+                        mb-1
+                        `;
+
+
+                    const rate =
+                        from === to
+                            ? 1
+                            : getCrossRate(
+                                from,
+                                to
+                            );
+
+
+                    row.innerHTML =
+                        `
+                        <div
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                            "
+                        >
+
+                            <div
+                                class="
+                                    w-10
+                                    h-10
+                                    rounded-xl
+                                    bg-indigo-100
+                                    dark:bg-indigo-500/10
+                                    text-indigo-600
+                                    flex
+                                    items-center
+                                    justify-center
+                                    font-bold
+                                "
+                            >
+                                ${from}
+                            </div>
+
+                            <div>
+
+                                <p
+                                    class="
+                                        font-black
+                                        text-sm
+                                    "
+                                >
+                                    ${from}
+                                    <span
+                                        class="
+                                            text-slate-400
+                                            mx-1
+                                        "
+                                    >
+                                        →
+                                    </span>
+                                    ${to}
+                                </p>
+
+                                <p
+                                    class="
+                                        text-xs
+                                        text-slate-400
+                                        mt-1
+                                    "
+                                >
+                                    ${currencies[from]?.name || from}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="text-right">
+
+                            <p
+                                class="
+                                    font-black
+                                    text-sm
+                                "
+                            >
+                                ${
+                                    Number.isFinite(rate)
+                                        ? formatNumber(rate)
+                                        : "—"
+                                }
+                            </p>
+
+                            <button
+                                class="
+                                    remove-favorite
+                                    text-xs
+                                    text-red-500
+                                    mt-1
+                                "
+                                data-pair="${pair}"
+                            >
+                                Remove
+                            </button>
+
+                        </div>
+                        `;
+
+
+                    row.addEventListener(
+                        "dblclick",
+                        () => {
+
+                            fromCurrency.value =
+                                from;
+
+                            toCurrency.value =
+                                to;
+
+                            refreshRates();
+
+                            document
+                                .getElementById(
+                                    "converterSection"
+                                )
+                                .scrollIntoView({
+                                    behavior:
+                                        "smooth"
+                                });
+
+                        }
+                    );
+
+
+                    row
+                        .querySelector(
+                            ".remove-favorite"
+                        )
+                        .addEventListener(
+                            "click",
+                            event => {
+
+                                event.stopPropagation();
+
+
+                                favorites =
+                                    favorites.filter(
+                                        item =>
+                                            item !== pair
+                                    );
+
+
+                                saveData();
+
+                                renderFavorites();
+
+                                updateStats();
+
+                                updateFavoriteButton();
+
+                            }
+                        );
+
+
+                    container.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =======================================================
+           CROSS RATE
+        ======================================================== */
+
+        function getCrossRate(
+            from,
+            to
+        ) {
+
+            /*
+                Current rates are based on the selected
+                FROM currency.
+
+                If the favorite is not the current base,
+                we use USD as a bridge where possible.
+            */
+
+            if (
+                from === fromCurrency.value
+            ) {
+
+                return currentRates[to];
+
+            }
+
+
+            if (
+                from === to
+            ) {
+
+                return 1;
+
+            }
+
+
+            const fromToUSD =
+                getRateThroughUSD(
+                    from
+                );
+
+
+            const toUSD =
+                getRateThroughUSD(
+                    to
+                );
+
+
+            if (
+                fromToUSD &&
+                toUSD
+            ) {
+
+                return (
+                    fromToUSD /
+                    toUSD
+                );
+
+            }
+
+
+            return NaN;
+
+        }
+
+
+        function getRateThroughUSD(
+            code
+        ) {
+
+            if (
+                code === "USD"
+            ) {
+
+                return 1;
+
+            }
+
+
+            /*
+                If USD is current base,
+                currentRates directly contains the rate.
+            */
+
+            if (
+                fromCurrency.value === "USD"
+            ) {
+
+                return currentRates[code];
+
+            }
+
+
+            /*
+                If selected base is the requested code,
+                the USD quote is enough.
+            */
+
+            if (
+                fromCurrency.value === code
+            ) {
+
+                const usd =
+                    currentRates.USD;
+
+                if (
+                    usd
+                ) {
+
+                    return 1 / usd;
+
+                }
+
+            }
+
+
+            return undefined;
+
+        }
+
+
+        /* =======================================================
+           HISTORY
+        ======================================================== */
+
+        function saveConversionToHistory() {
+
+            const value =
+                Number(
+                    amount.value
+                ) || 0;
+
+
+            if (
+                !value ||
+                !currentRate
+            ) {
+
+                return;
+
+            }
+
+
+            const item = {
+
+                id:
+                    Date.now(),
+
+                amount:
+                    value,
+
+                from:
+                    fromCurrency.value,
+
+                to:
+                    toCurrency.value,
+
+                result:
+                    value * currentRate,
+
+                rate:
+                    currentRate,
+
+                date:
+                    new Date().toISOString()
+
+            };
+
+
+            /*
+                Avoid duplicate records caused by typing.
+            */
+
+            const latest =
+                history[0];
+
+
+            if (
+                latest &&
+                latest.amount === item.amount &&
+                latest.from === item.from &&
+                latest.to === item.to
+            ) {
+
+                return;
+
+            }
+
+
+            history.unshift(
+                item
+            );
+
+
+            /*
+                Keep the latest 50.
+            */
+
+            history =
+                history.slice(
+                    0,
+                    50
+                );
+
+
+            saveData();
+
+            renderHistory();
+
+            updateStats();
+
+        }
+
+
+        /*
+            Save after a short delay rather than on every
+            single keystroke.
+        */
+
+        let historyTimer;
+
+
+        function queueHistorySave() {
+
+            clearTimeout(
+                historyTimer
+            );
+
+
+            historyTimer =
+                setTimeout(
+                    saveConversionToHistory,
+                    800
+                );
+
+        }
+
+
+        amount.addEventListener(
+            "input",
+            queueHistorySave
+        );
+
+
+        fromCurrency.addEventListener(
+            "change",
+            () => {
+
+                clearTimeout(
+                    historyTimer
+                );
+
+            }
+        );
+
+
+        toCurrency.addEventListener(
+            "change",
+            () => {
+
+                queueHistorySave();
+
+            }
+        );
+
+
+        /* =======================================================
+           RENDER HISTORY
+        ======================================================== */
+
+        function renderHistory() {
+
+            const container =
+                $("#historyList");
+
+
+            if (
+                history.length === 0
+            ) {
+
+                container.innerHTML =
+                    `
+                    <div
+                        class="
+                            text-center
+                            py-10
+                            text-slate-400
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-clock-rotate-left
+                                text-3xl
+                                mb-3
+                            "
+                        ></i>
+
+                        <p class="text-sm">
+                            No conversions yet.
+                        </p>
+
+                    </div>
+                    `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                "";
+
+
+            history
+                .slice(0, 10)
+                .forEach(
+                    item => {
+
+                        const row =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        row.className =
+                            `
+                            flex
+                            items-center
+                            justify-between
+                            gap-3
+                            p-4
+                            rounded-2xl
+                            hover:bg-slate-50
+                            dark:hover:bg-slate-800
+                            mb-1
+                            `;
+
+
+                        row.innerHTML =
+                            `
+                            <div
+                                class="
+                                    flex
+                                    items-center
+                                    gap-3
+                                    min-w-0
+                                "
+                            >
+
+                                <div
+                                    class="
+                                        w-10
+                                        h-10
+                                        rounded-xl
+                                        bg-slate-100
+                                        dark:bg-slate-800
+                                        flex
+                                        items-center
+                                        justify-center
+                                        text-xs
+                                        font-black
+                                    "
+                                >
+                                    ${item.from}
+                                </div>
+
+                                <div class="min-w-0">
+
+                                    <p
+                                        class="
+                                            text-sm
+                                            font-black
+                                            truncate
+                                        "
+                                    >
+                                        ${formatNumber(item.amount)}
+                                        ${item.from}
+                                        →
+                                        ${formatNumber(item.result)}
+                                        ${item.to}
+                                    </p>
+
+                                    <p
+                                        class="
+                                            text-xs
+                                            text-slate-400
+                                            mt-1
+                                        "
+                                    >
+                                        1 ${item.from}
+                                        =
+                                        ${formatNumber(item.rate)}
+                                        ${item.to}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div
+                                class="
+                                    text-[10px]
+                                    text-slate-400
+                                    whitespace-nowrap
+                                "
+                            >
+                                ${formatDate(item.date)}
+                            </div>
+                            `;
+
+
+                        container.appendChild(
+                            row
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =======================================================
+           CLEAR HISTORY
+        ======================================================== */
+
+        $("#clearHistory")
+            .addEventListener(
+                "click",
+                () => {
+
+                    if (
+                        history.length === 0
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        !confirm(
+                            "Delete all conversion history?"
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    history = [];
+
+                    saveData();
+
+                    renderHistory();
+
+                    updateStats();
+
+                    showToast(
+                        "History cleared."
+                    );
+
+                }
+            );
+
+
+        /* =======================================================
+           FORMAT DATE
+        ======================================================== */
+
+        function formatDate(
+            date
+        ) {
+
+            return new Date(
+                date
+            ).toLocaleDateString(
+                undefined,
+                {
+                    month: "short",
+                    day: "numeric"
+                }
+            );
+
+        }
+
+
+        /* =======================================================
+           UPDATE STATISTICS
+        ======================================================== */
+
+        function updateStats() {
+
+            $("#statFavorites")
+                .textContent =
+                favorites.length;
+
+
+            $("#statConversions")
+                .textContent =
+                history.length;
+
+        }
+
+
+        /* =======================================================
+           MARKET CARDS
+        ======================================================== */
+
+        async function renderMarketCards() {
+
+            const container =
+                $("#marketCards");
+
+
+            const pairs = [
+
+                ["EUR", "USD"],
+
+                ["GBP", "USD"],
+
+                ["USD", "JPY"],
+
+                ["USD", "PKR"],
+
+                ["USD", "AED"],
+
+                ["USD", "CAD"]
+
+            ];
+
+
+            container.innerHTML =
+                "";
+
+
+            pairs.forEach(
+                ([base, quote]) => {
+
+                    const card =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    card.className =
+                        `
+                        w-full
+                        text-left
+                        p-4
+                        rounded-2xl
+                        bg-slate-50
+                        dark:bg-slate-800
+                        hover:bg-slate-100
+                        dark:hover:bg-slate-700
+                        transition
+                        `;
+
+
+                    let value =
+                        "—";
+
+
+                    /*
+                        If the selected base is USD,
+                        we can directly read currentRates.
+                    */
+
+                    if (
+                        fromCurrency.value ===
+                        base
+                    ) {
+
+                        value =
+                            currentRates[quote];
+
+                    }
+
+
+                    /*
+                        If selected base is the quote,
+                        invert the rate.
+                    */
+
+                    else if (
+                        fromCurrency.value ===
+                        quote
+                    ) {
+
+                        const direct =
+                            currentRates[base];
+
+                        if (
+                            direct
+                        ) {
+
+                            value =
+                                1 / direct;
+
+                        }
+
+                    }
+
+
+                    card.innerHTML =
+                        `
+                        <div
+                            class="
+                                flex
+                                items-center
+                                justify-between
+                            "
+                        >
+
+                            <div>
+
+                                <p
+                                    class="
+                                        text-sm
+                                        font-black
+                                    "
+                                >
+                                    ${base}/${quote}
+                                </p>
+
+                                <p
+                                    class="
+                                        text-xs
+                                        text-slate-400
+                                        mt-1
+                                    "
+                                >
+                                    ${currencies[base]?.name || base}
+                                </p>
+
+                            </div>
+
+                            <div class="text-right">
+
+                                <p
+                                    class="
+                                        font-black
+                                        text-sm
+                                    "
+                                >
+                                    ${
+                                        typeof value === "number"
+                                            ? formatNumber(value)
+                                            : "—"
+                                    }
+                                </p>
+
+                                <p
+                                    class="
+                                        text-[10px]
+                                        text-emerald-500
+                                        mt-1
+                                    "
+                                >
+                                    Live
+                                </p>
+
+                            </div>
+
+                        </div>
+                        `;
+
+
+                    card.addEventListener(
+                        "click",
+                        async () => {
+
+                            if (
+                                currencies[base]
+                            ) {
+
+                                fromCurrency.value =
+                                    base;
+
+                            }
+
+
+                            if (
+                                currencies[quote]
+                            ) {
+
+                                toCurrency.value =
+                                    quote;
+
+                            }
+
+
+                            await refreshRates();
+
+
+                            document
+                                .getElementById(
+                                    "converterSection"
+                                )
+                                .scrollIntoView({
+                                    behavior:
+                                        "smooth"
+                                });
+
+                        }
+                    );
+
+
+                    container.appendChild(
+                        card
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =======================================================
+           CHART RANGE
+        ======================================================== */
+
+        $$(".chartRange")
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        async () => {
+
+                            chartRange =
+                                button.dataset.range;
+
+
+                            $$(".chartRange")
+                                .forEach(
+                                    btn => {
+
+                                        btn.classList.remove(
+                                            "bg-white",
+                                            "dark:bg-slate-700",
+                                            "shadow"
+                                        );
+
+                                        btn.classList.add(
+                                            "text-slate-400"
+                                        );
+
+                                    }
+                                );
+
+
+                            button.classList.add(
+                                "bg-white",
+                                "dark:bg-slate-700",
+                                "shadow"
+                            );
+
+
+                            button.classList.remove(
+                                "text-slate-400"
+                            );
+
+
+                            await loadChart();
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* =======================================================
+           CHART LOADING
+        ======================================================== */
+
+        async function loadChart() {
+
+            const base =
+                fromCurrency.value;
+
+            const quote =
+                toCurrency.value;
+
+            if (
+                !base ||
+                !quote
+            ) {
+
+                drawSimpleChart(
+                    [1, 1, 1, 1, 1]
+                );
+
+                return;
+
+            }
+
+            chartLoading.classList.remove(
+                "hidden"
+            );
+
+            try {
+
+                const values =
+                    getChartSnapshotData(
+                        base,
+                        quote
+                    );
+
+                if (
+                    values.length >= 2
+                ) {
+
+                    drawChart(
+                        values
+                    );
+
+                } else if (
+                    Number.isFinite(currentRate)
+                ) {
+
+                    drawSimpleChart([
+                        currentRate,
+                        currentRate,
+                        currentRate,
+                        currentRate,
+                        currentRate
+                    ]);
+
+                } else {
+
+                    drawSimpleChart(
+                        [1, 1, 1, 1, 1]
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Chart error:",
+                    error
+                );
+
+                drawSimpleChart(
+                    [1, 1, 1, 1, 1]
+                );
+
+            } finally {
+
+                chartLoading.classList.add(
+                    "hidden"
+                );
+
+            }
+
+        }
+
+
+        /* =======================================================
+           DATE TO ISO
+        ======================================================== */
+
+        function toISODate(
+            date
+        ) {
+
+            return date
+                .toISOString()
+                .split("T")[0];
+
+        }
+
+
+        /* =======================================================
+           DRAW CHART
+        ======================================================== */
+
+        function drawChart(
+            data
+        ) {
+
+            const canvas =
+                chartCanvas;
+
+
+            const parent =
+                canvas.parentElement;
+
+
+            const width =
+                parent.clientWidth;
+
+
+            const height =
+                parent.clientHeight;
+
+
+            const dpr =
+                window.devicePixelRatio ||
+                1;
+
+
+            canvas.width =
+                width * dpr;
+
+
+            canvas.height =
+                height * dpr;
+
+
+            canvas.style.width =
+                `${width}px`;
+
+
+            canvas.style.height =
+                `${height}px`;
+
+
+            const ctx =
+                canvas.getContext(
+                    "2d"
+                );
+
+
+            ctx.scale(
+                dpr,
+                dpr
+            );
+
+
+            ctx.clearRect(
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            const values =
+                data.map(
+                    item =>
+                        item.value
+                );
+
+
+            const min =
+                Math.min(
+                    ...values
+                );
+
+
+            const max =
+                Math.max(
+                    ...values
+                );
+
+
+            const range =
+                max - min || 1;
+
+
+            const padding =
+                35;
+
+
+            const chartWidth =
+                width -
+                padding * 2;
+
+
+            const chartHeight =
+                height -
+                padding * 2;
+
+
+            const points =
+                data.map(
+                    (item, index) => {
+
+                        const x =
+                            padding +
+                            (
+                                index /
+                                Math.max(
+                                    data.length - 1,
+                                    1
+                                )
+                            ) *
+                            chartWidth;
+
+
+                        const y =
+                            padding +
+                            (
+                                1 -
+                                (
+                                    (
+                                        item.value -
+                                        min
+                                    ) /
+                                    range
+                                )
+                            ) *
+                            chartHeight;
+
+
+                        return {
+                            x,
+                            y
+                        };
+
+                    }
+                );
+
+
+            /*
+                Draw gradient area.
+            */
+
+            const gradient =
+                ctx.createLinearGradient(
+                    0,
+                    0,
+                    0,
+                    height
+                );
+
+
+            gradient.addColorStop(
+                0,
+                "rgba(99,102,241,.28)"
+            );
+
+
+            gradient.addColorStop(
+                1,
+                "rgba(99,102,241,0)"
+            );
+
+
+            ctx.beginPath();
+
+
+            points.forEach(
+                (point, index) => {
+
+                    if (
+                        index === 0
+                    ) {
+
+                        ctx.moveTo(
+                            point.x,
+                            point.y
+                        );
+
+                    } else {
+
+                        ctx.lineTo(
+                            point.x,
+                            point.y
+                        );
+
+                    }
+
+                }
+            );
+
+
+            ctx.lineTo(
+                points[points.length - 1].x,
+                height - padding
+            );
+
+
+            ctx.lineTo(
+                points[0].x,
+                height - padding
+            );
+
+
+            ctx.closePath();
+
+
+            ctx.fillStyle =
+                gradient;
+
+
+            ctx.fill();
+
+
+            /*
+                Draw line.
+            */
+
+            ctx.beginPath();
+
+
+            points.forEach(
+                (point, index) => {
+
+                    if (
+                        index === 0
+                    ) {
+
+                        ctx.moveTo(
+                            point.x,
+                            point.y
+                        );
+
+                    } else {
+
+                        ctx.lineTo(
+                            point.x,
+                            point.y
+                        );
+
+                    }
+
+                }
+            );
+
+
+            ctx.strokeStyle =
+                "#6366f1";
+
+
+            ctx.lineWidth =
+                3;
+
+
+            ctx.lineJoin =
+                "round";
+
+
+            ctx.lineCap =
+                "round";
+
+
+            ctx.stroke();
+
+
+            /*
+                Draw latest point.
+            */
+
+            const last =
+                points[
+                    points.length - 1
+                ];
+
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+                last.x,
+                last.y,
+                5,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fillStyle =
+                "#6366f1";
+
+
+            ctx.fill();
+
+
+            /*
+                Draw latest value.
+            */
+
+            ctx.font =
+                "bold 12px Inter";
+
+
+            ctx.fillStyle =
+                "#6366f1";
+
+
+            ctx.fillText(
+                formatNumber(
+                    values[values.length - 1]
+                ),
+                Math.max(
+                    5,
+                    last.x - 35
+                ),
+                Math.max(
+                    15,
+                    last.y - 12
+                )
+            );
+
+        }
+
+
+        /* =======================================================
+           SIMPLE FALLBACK CHART
+        ======================================================== */
+
+        function drawSimpleChart(
+            values
+        ) {
+
+            const fakeData =
+                values.map(
+                    (value, index) => ({
+                        date:
+                            String(index),
+                        value
+                    })
+                );
+
+
+            drawChart(
+                fakeData
+            );
+
+        }
+
+
+        /* =======================================================
+           RESIZE CHART
+        ======================================================== */
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                /*
+                    Redraw using a simple visual when resizing.
+                    The next API refresh will restore exact data.
+                */
+
+                if (
+                    currentRate
+                ) {
+
+                    drawSimpleChart(
+                        [
+                            currentRate * .98,
+                            currentRate * .995,
+                            currentRate,
+                            currentRate * 1.01,
+                            currentRate
+                        ]
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =======================================================
+           GLOBAL SEARCH
+        ======================================================== */
+
+        $("#globalSearch")
+            .addEventListener(
+                "input",
+                event => {
+
+                    const query =
+                        event.target.value
+                            .trim()
+                            .toLowerCase();
+
+
+                    if (
+                        !query
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    /*
+                        Find first matching currency.
+                    */
+
+                    const match =
+                        Object.values(
+                            currencies
+                        ).find(
+                            currency =>
+                                currency.code
+                                    .toLowerCase()
+                                    .includes(query) ||
+                                currency.name
+                                    .toLowerCase()
+                                    .includes(query)
+                        );
+
+
+                    if (
+                        match
+                    ) {
+
+                        fromCurrency.value =
+                            match.code;
+
+
+                        refreshRates();
+
+
+                        document
+                            .getElementById(
+                                "converterSection"
+                            )
+                            .scrollIntoView({
+                                behavior:
+                                    "smooth"
+                            });
+
+                    }
+
+                }
+            );
+
+
+        /* =======================================================
+           EXPORT HISTORY
+        ======================================================== */
+
+        $("#exportButton")
+            .addEventListener(
+                "click",
+                () => {
+
+                    if (
+                        history.length === 0
+                    ) {
+
+                        showToast(
+                            "There is no history to export.",
+                            "error"
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                        Create CSV header.
+                    */
+
+                    const rows = [
+
+                        [
+                            "Date",
+                            "Amount",
+                            "From",
+                            "Result",
+                            "To",
+                            "Rate"
+                        ]
+
+                    ];
+
+
+                    history.forEach(
+                        item => {
+
+                            rows.push([
+                                item.date,
+                                item.amount,
+                                item.from,
+                                item.result,
+                                item.to,
+                                item.rate
+                            ]);
+
+                        }
+                    );
+
+
+                    const csv =
+                        rows
+                            .map(
+                                row =>
+                                    row
+                                        .map(
+                                            value =>
+                                                `"${String(value).replace(
+                                                    /"/g,
+                                                    '""'
+                                                )}"`
+                                        )
+                                        .join(",")
+                            )
+                            .join("\n");
+
+
+                    const blob =
+                        new Blob(
+                            [csv],
+                            {
+                                type:
+                                    "text/csv;charset=utf-8;"
+                            }
+                        );
+
+
+                    const url =
+                        URL.createObjectURL(
+                            blob
+                        );
+
+
+                    const link =
+                        document.createElement(
+                            "a"
+                        );
+
+
+                    link.href =
+                        url;
+
+
+                    link.download =
+                        `globalfx-history-${Date.now()}.csv`;
+
+
+                    link.click();
+
+
+                    URL.revokeObjectURL(
+                        url
+                    );
+
+
+                    showToast(
+                        "History exported successfully."
+                    );
+
+                }
+            );
+
+
+        /* =======================================================
+           THEME
+        ======================================================== */
+
+        function loadTheme() {
+
+            const saved =
+                localStorage.getItem(
+                    STORAGE.theme
+                );
+
+
+            if (
+                saved === "dark"
+            ) {
+
+                document.documentElement
+                    .classList
+                    .add("dark");
+
+
+                $("#themeToggle")
+                    .innerHTML =
+                    '<i class="fa-solid fa-sun"></i>';
+
+            } else {
+
+                document.documentElement
+                    .classList
+                    .remove("dark");
+
+
+                $("#themeToggle")
+                    .innerHTML =
+                    '<i class="fa-solid fa-moon"></i>';
+
+            }
+
+        }
+
+
+        $("#themeToggle")
+            .addEventListener(
+                "click",
+                () => {
+
+                    const dark =
+                        document.documentElement
+                            .classList
+                            .toggle("dark");
+
+
+                    localStorage.setItem(
+                        STORAGE.theme,
+                        dark
+                            ? "dark"
+                            : "light"
+                    );
+
+
+                    $("#themeToggle")
+                        .innerHTML =
+                        dark
+                            ? '<i class="fa-solid fa-sun"></i>'
+                            : '<i class="fa-solid fa-moon"></i>';
+
+                }
+            );
+
+
+        /* =======================================================
+           API STATUS
+        ======================================================== */
+
+        function setAPIStatus(
+            status
+        ) {
+
+            const apiStatus =
+                $("#apiStatus");
+
+
+            const statAPI =
+                $("#statAPI");
+
+
+            if (
+                status === "loading"
+            ) {
+
+                apiStatus.innerHTML =
+                    `
+                    <span
+                        class="
+                            w-2
+                            h-2
+                            rounded-full
+                            bg-amber-500
+                        "
+                    ></span>
+                    Updating
+                    `;
+
+
+                apiStatus.className =
+                    `
+                    hidden
+                    lg:flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-2
+                    rounded-xl
+                    bg-amber-50
+                    dark:bg-amber-500/10
+                    text-amber-600
+                    text-xs
+                    font-bold
+                    `;
+
+
+                statAPI.textContent =
+                    "Updating";
+
+
+                return;
+
+            }
+
+
+            if (
+                status === "offline"
+            ) {
+
+                apiStatus.innerHTML =
+                    `
+                    <span
+                        class="
+                            w-2
+                            h-2
+                            rounded-full
+                            bg-red-500
+                        "
+                    ></span>
+                    Offline
+                    `;
+
+
+                apiStatus.className =
+                    `
+                    hidden
+                    lg:flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-2
+                    rounded-xl
+                    bg-red-50
+                    dark:bg-red-500/10
+                    text-red-600
+                    text-xs
+                    font-bold
+                    `;
+
+
+                statAPI.textContent =
+                    "Offline";
+
+
+                return;
+
+            }
+
+
+            apiStatus.innerHTML =
+                `
+                <span
+                    class="
+                        w-2
+                        h-2
+                        rounded-full
+                        bg-emerald-500
+                    "
+                ></span>
+                Live
+                `;
+
+
+            apiStatus.className =
+                `
+                hidden
+                lg:flex
+                items-center
+                gap-2
+                px-3
+                py-2
+                rounded-xl
+                bg-emerald-50
+                dark:bg-emerald-500/10
+                text-emerald-600
+                text-xs
+                font-bold
+                `;
+
+
+            statAPI.textContent =
+                "Online";
+
+        }
+
+
+        /* =======================================================
+           INTERNET CONNECTION
+        ======================================================== */
+
+        window.addEventListener(
+            "offline",
+            () => {
+
+                setAPIStatus(
+                    "offline"
+                );
+
+
+                showToast(
+                    "Internet connection lost.",
+                    "error"
+                );
+
+            }
+        );
+
+
+        window.addEventListener(
+            "online",
+            async () => {
+
+                showToast(
+                    "Internet connection restored."
+                );
+
+
+                await refreshRates();
+
+            }
+        );
+
+
+        /* =======================================================
+           AUTOMATIC RATE REFRESH
+        ======================================================== */
+
+        /*
+            Refresh every 5 minutes.
+
+            ExchangeRate-API provides the latest available reference rates.
+            Refreshing every 5 minutes keeps this dashboard updated.
+        */
+
+        setInterval(
+            () => {
+
+                if (
+                    !mainApp.classList.contains(
+                        "hidden"
+                    )
+                ) {
+
+                    refreshRates();
+
+                }
+
+            },
+            5 * 60 * 1000
+        );
+
+
+        /* =======================================================
+           NAVIGATION ACTIVE STATE
+        ======================================================== */
+
+        $$(".nav-link")
+            .forEach(
+                link => {
+
+                    link.addEventListener(
+                        "click",
+                        () => {
+
+                            $$(".nav-link")
+                                .forEach(
+                                    item => {
+
+                                        item.classList.remove(
+                                            "nav-active"
+                                        );
+
+                                    }
+                                );
+
+
+                            link.classList.add(
+                                "nav-active"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* =======================================================
+           DOUBLE CLICK CONVERTER = FAVORITE
+        ======================================================== */
+
+        $("#converterSection")
+            .addEventListener(
+                "dblclick",
+                event => {
+
+                    /*
+                        Ignore inputs/buttons.
+                    */
+
+                    if (
+                        event.target.closest(
+                            "input, select, button"
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    addCurrentFavorite();
+
+                }
+            );
+
+
+        /* =======================================================
+           CHECK LOGIN SESSION ON STARTUP
+        ======================================================== */
+
+        async function initializeApplication() {
+
+            loadTheme();
+
+
+            const loggedIn =
+                localStorage.getItem(
+                    STORAGE.loggedIn
+                );
+
+
+            if (
+                loggedIn === "true"
+            ) {
+
+                await showApp();
+
+            } else {
+
+                authScreen.classList.remove(
+                    "hidden"
+                );
+
+                mainApp.classList.add(
+                    "hidden"
+                );
+
+            }
+
+        }
+
+
+        /* =======================================================
+           START APPLICATION
+        ======================================================== */
+
+        initializeApplication();
+
+    </script>
+
+</body>
+
+</html>
